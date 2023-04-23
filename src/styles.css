@@ -1,0 +1,19 @@
+@import url("../node_modules/github-markdown-css/github-markdown-dark.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.md a {
+  @apply text-blue-500;
+  text-decoration: none !important;
+}
+
+.md a:hover {
+  @apply text-blue-600 decoration-solid;
+  text-decoration: underline !important;
+}
+
+.md img {
+  @apply rounded-md cursor-pointer;
+}

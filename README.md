@@ -1,16 +1,40 @@
-# Tauri + Vanilla TS
+# Mark
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
+Fast, easy, simple markdown viewing.
 
-no way hello there what is this just write here and we are done what
+### Features:
 
-## Recommended IDE Setup
+- 🛩️ Small
+- ⚡ Performant
+- 📡 Live updates
+- ⌨️ Keyboard Driven
+- 📑 Multiple Files
+- ⬇️ Markdown only file picker
+- 🐙 GitHub Flavored Markdown (GFM)
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
-- two
-- three
+## Open files in the termnial
 
-what cool stuff is this? what?
+```bash
+    mark ./file1.md ./file2.md ...
+```
 
-![wow](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ12E5SmVF2b46j1w7rZi1xku6KieDpJGw0Ygu_IPag&s)
+## File Picker
 
+![file picker img](url)
+
+## Multiple Files
+
+![multiple files indicator](url)
+
+## Keyboard Bindings
+
+| shortcut                             | action            |
+| ------------------------------------ | ----------------- |
+| <kbd>H</kbd> \| <kbd>SHIFT + ↑</kbd> | Previous File     |
+| <kbd>L</kbd> \| <kbd>SHIFT + ↓</kbd> | Next File         |
+| <kbd>h</kbd> \| <kbd>←</kbd>         | Scroll Page Left  |
+| <kbd>l</kbd> \| <kbd>→</kbd>         | Scroll Page Right |
+| <kbd>k</kbd> \| <kbd>↑</kbd>         | Scroll Page Up    |
+| <kbd>j</kbd> \| <kbd>↓</kbd>         | Scroll Page Down  |
+| <kbd>F</kbd>                         | Open File Picker  |
+| <kbd>C</kbd>                         | Close File        |

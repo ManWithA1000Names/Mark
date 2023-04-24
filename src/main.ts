@@ -49,6 +49,7 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       for (const input of inputs) {
         article.innerHTML = input.content;
+        console.log(input.content);
         article_file.innerText = "file: " + input.file;
         shim();
       }

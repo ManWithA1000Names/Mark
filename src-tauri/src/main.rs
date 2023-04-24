@@ -77,7 +77,17 @@ fn init_inputs(state: tauri::State<Vec<PathBuf>>) -> Vec<InitialFile> {
         match std::fs::read_to_string(input) {
             Err(e) => eprintln!("[ERROR]: {:?}", e),
             Ok(ref payload) => v.push(InitialFile {
-                content: markdown::to_html(payload),
+                content: markdown::to_html_with_options(
+                    payload,
+                    &markdown::Options {
+                        compile: markdown::CompileOptions {
+                            allow_dangerous_html: true,
+                            ..markdown::CompileOptions::default()
+                        },
+                        ..markdown::Options::gfm()
+                    },
+                )
+                .unwrap(),
                 file: input.to_owned(),
             }),
         };

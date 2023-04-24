@@ -66,7 +66,17 @@ pub mod payload {
         pub fn new(file: &'a Path) -> io::Result<Self> {
             let content = std::fs::read_to_string(file)?;
             Ok(Self {
-                content: to_html(&content),
+                content: markdown::to_html_with_options(
+                    &content,
+                    &markdown::Options {
+                        compile: markdown::CompileOptions {
+                            allow_dangerous_html: true,
+                            ..markdown::CompileOptions::default()
+                        },
+                        ..markdown::Options::gfm()
+                    },
+                )
+                .unwrap(),
                 file,
             })
         }

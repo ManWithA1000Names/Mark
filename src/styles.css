@@ -1,20 +1,76 @@
 @import url("../node_modules/github-markdown-css/github-markdown-dark.css");
 
-/* @tailwind base; */
-/* @tailwind components; */
-/* @tailwind utilities; */
-
 body {
   background-color: #0d1117;
+  overflow: auto;
 }
 
-.markdown-body {
+:root {
+  --github-gray: #30363d;
+  --background: #0d1117;
+  --link-blue: #58a6ff;
+  --github-gray-light: #161b22;
+}
+
+.markdown-body-container {
   box-sizing: border-box;
   min-width: 200px;
   max-width: 980px;
   margin: 0 auto;
-  padding: 45px;
   box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  overflow: auto;
+}
+.markdown-body-container article {
+  padding: 45px;
+}
+
+.markdown-body-container header {
+  border-bottom: 1px solid var(--github-gray);
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  padding: 8px;
+}
+
+.markdown-body-container h3 {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+  align-self: center;
+  overflow: auto;
+}
+
+.markdown-body-container header button {
+  fill: #7d8590;
+  border-radius: 6px;
+  background: var(--background);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: background-color 0.1s ease-in-out;
+  justify-self: center;
+  align-self: center;
+}
+
+.markdown-body-container header button:hover {
+  background: --var(github-gray);
+}
+
+.markdown-body-container header button:nth-of-type(1) {
+  margin-right: 8px;
+}
+
+.markdown-body a {
+  position: relative;
+}
+
+.markdown-body a kbd {
+  position: absolute;
+  top: -10px;
+  color: var(--link-blue);
 }
 
 @media (max-width: 767px) {
@@ -22,3 +78,55 @@ body {
     padding: 15px;
   }
 }
+
+a span.active-letter {
+  color: white;
+  font-weight: bold;
+}
+
+/* --- File Picker --- */
+#file-picker-root {
+  background-color: #0d1117;
+  position: absolute;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  box-sizing: border-box;
+  width: clamp(200px, 90vw, 980px);
+  margin: 0 auto;
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  overflow: auto;
+
+  color: white;
+}
+
+#file-picker-root h1,
+#file-picker-root h3 {
+  text-align: center;
+}
+
+#file-picker-root h1 {
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--github-gray);
+  margin: 0;
+  padding: 1rem 0;
+}
+
+#file-picker-root form {
+  background-color: var(--github-gray-light);
+  padding: 8px;
+
+}
+
+#file-picker-root input {
+  width: 100%;
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  color: white;
+}
+/* ------------------- */

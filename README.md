@@ -10,7 +10,7 @@ Fast, easy, simple markdown viewing.
 - ⌨️ Keyboard Driven
 - 📑 Multiple Files
 - ⬇️ Markdown only file picker
-- 🐙 GitHub Flavored Markdown (GFM)
+- 🐙 Full CommonMark + GitHub Flavored Markdown (GFM)
 
 ## Open files in the termnial
 
@@ -30,11 +30,16 @@ Fast, easy, simple markdown viewing.
 
 | shortcut                             | action            |
 | ------------------------------------ | ----------------- |
-| <kbd>H</kbd> \| <kbd>SHIFT + ↑</kbd> | Previous File     |
-| <kbd>L</kbd> \| <kbd>SHIFT + ↓</kbd> | Next File         |
+| <kbd>H</kbd> \| <kbd>SHIFT + ←</kbd> | Previous File     |
+| <kbd>L</kbd> \| <kbd>SHIFT + →</kbd> | Next File         |
 | <kbd>h</kbd> \| <kbd>←</kbd>         | Scroll Page Left  |
 | <kbd>l</kbd> \| <kbd>→</kbd>         | Scroll Page Right |
 | <kbd>k</kbd> \| <kbd>↑</kbd>         | Scroll Page Up    |
 | <kbd>j</kbd> \| <kbd>↓</kbd>         | Scroll Page Down  |
-| <kbd>F</kbd>                         | Open File Picker  |
-| <kbd>C</kbd>                         | Close File        |
+| <kbd>f</kbd>                         | Open File Picker  |
+| <kbd>c</kbd>                         | Close File        |
+| <kbd>o</kbd> + Link ID               | Open Link         |
+
+[My Github](https://github.com/manwitha1000names)
+
+[My Repositories](https://github.com/manwitha1000names?tab=repositories)

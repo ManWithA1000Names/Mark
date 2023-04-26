@@ -10,19 +10,21 @@
 </head>
 
 <body>
-  <aside id="file-picker-root" hidden>
+  <div id="file-picker-root" hidden>
     <h1>File Picker</h1>
-    <div id="recent-files">
+
+    <div id="recent-files-root">
       <h3>Recent</h3>
       <div></div>
     </div>
-    <div>
-      <form>
-        <input type="text" />
-      </form>
-    </div>
-    <div id="file-picker-completions"></div>
-  </aside>
+
+    <form>
+      <input type="text" placeholder="Search markdown files..." />
+      <h4 style="margin: 8px 0px 4px 8px">Files:</h4>
+      <div id="search-results-root"></div>
+    </form>
+  </div>
+
   <main class="markdown-body-container">
     <header>
       <button id="file-picker-button">

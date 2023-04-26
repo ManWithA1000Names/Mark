@@ -10,9 +10,9 @@ Fast, easy, simple markdown viewing.
 - ⌨️ Keyboard Driven
 - 📑 Multiple Files
 - ⬇️ Markdown only file picker
-- 🐙 Full CommonMark + GitHub Flavored Markdown (GFM)
+- 🐙 Full CommonMark + GitHub Flavored Markdown (GFM) support.
 
-## Open files in the termnial
+## Open files in the terminal
 
 ```bash
     mark ./file1.md ./file2.md ...
@@ -39,6 +39,7 @@ Fast, easy, simple markdown viewing.
 | <kbd>f</kbd>                         | Open File Picker  |
 | <kbd>c</kbd>                         | Close File        |
 | <kbd>o</kbd> + Link ID               | Open Link         |
+| <kbd>?</kbd>                         | View Shortcuts    |
 
 [My Github](https://github.com/manwitha1000names)
 

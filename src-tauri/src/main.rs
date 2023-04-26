@@ -1,18 +1,38 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::path::PathBuf;
-
 use crossbeam_channel::Sender;
+use std::{
+    path::PathBuf,
+    sync::{Arc, Mutex},
+};
 use tauri::Manager;
 
 mod emit;
+mod fs_search;
 mod watcher;
+
+use fs_search::{FsFuzzySearcher, SearchResults};
+
+struct SearcherState(Arc<Mutex<Option<FsFuzzySearcher>>>);
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+#[tauri::command]
+fn search_files(
+    state: tauri::State<SearcherState>,
+    input: &str,
+) -> Result<SearchResults, &'static str> {
+    if let Some(ref searcher) = *state.0.lock().unwrap() {
+        println!("Searching...");
+        Ok(searcher.search(input))
+    } else {
+        Err("Loading...")
+    }
 }
 
 fn validate_arg(arg: String) -> PathBuf {
@@ -111,10 +131,17 @@ fn main() {
 
     inputs.push(PathBuf::from("/home/quri/dev/external/Mark/README.md"));
 
-    let inputs2 = inputs.clone();
+    let search_state = SearcherState(Arc::new(Mutex::new(None)));
+    let mutex2 = search_state.0.clone();
+    std::thread::spawn(move || {
+        // If someone panicked holding the lock we are fucked.
+        let mut lock = mutex2.lock().unwrap();
+        *lock = Some(FsFuzzySearcher::new().unwrap());
+    });
 
     tauri::Builder::default()
-        .manage(inputs2)
+        .manage(inputs.clone())
+        .manage(search_state)
         .setup(move |app| {
             let handle = app.handle();
 
@@ -137,7 +164,12 @@ fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, init_inputs, open_link])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            init_inputs,
+            open_link,
+            search_files
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

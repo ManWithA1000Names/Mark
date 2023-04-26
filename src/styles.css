@@ -10,6 +10,7 @@ body {
   --background: #0d1117;
   --link-blue: #58a6ff;
   --github-gray-light: #161b22;
+  --github-green: #238636;
 }
 
 .markdown-body-container {
@@ -56,7 +57,7 @@ body {
 }
 
 .markdown-body-container header button:hover {
-  background: --var(github-gray);
+  background: var(--github-gray);
 }
 
 .markdown-body-container header button:nth-of-type(1) {
@@ -79,18 +80,22 @@ body {
   }
 }
 
-a span.active-letter {
+span.active-letter {
   color: white;
   font-weight: bold;
+}
+
+.active-selection {
+  background-color: var(--github-gray);
 }
 
 /* --- File Picker --- */
 #file-picker-root {
   background-color: #0d1117;
-  position: absolute;
-  top: 62px;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 
   box-sizing: border-box;
   width: clamp(200px, 90vw, 980px);
@@ -101,32 +106,52 @@ a span.active-letter {
   overflow: auto;
 
   color: white;
+  z-index: 10;
 }
 
-#file-picker-root h1,
-#file-picker-root h3 {
-  text-align: center;
+#file-picker-root[data-visible="true"] + main article {
+  filter: blur(5px);
+}
+
+#file-picker-root h4 {
+  text-align: left;
+  margin: 0;
+  margin-left: 8px;
+  margin-top: 8px;
 }
 
 #file-picker-root h1 {
+  text-align: center;
   box-sizing: border-box;
   border-bottom: 1px solid var(--github-gray);
   margin: 0;
   padding: 1rem 0;
 }
 
+#search-results-root {
+  max-height: 200px;
+  overflow: auto;
+}
+
 #file-picker-root form {
   background-color: var(--github-gray-light);
   padding: 8px;
+  margin-bottom: 16px;
+}
 
+#file-picker-root form div {
+  background-color: var(--background);
+  padding: 8px;
+  border-radius: 6px;
 }
 
 #file-picker-root input {
-  width: 100%;
+  width: calc(100% - 8px);
   border: 1px solid var(--github-gray);
   border-radius: 6px;
   background-color: var(--background);
   font-size: 1.5rem;
   color: white;
+  padding-left: 8px;
 }
 /* ------------------- */

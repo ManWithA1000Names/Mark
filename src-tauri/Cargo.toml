@@ -20,6 +20,8 @@ markdown = "1.0.0-alpha.8"
 notify = "5.1.0"
 crossbeam-channel = "0.5.8"
 opener = "0.6.1"
+ignore = "0.4.20"
+fuzzy-matcher = "0.3.7"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

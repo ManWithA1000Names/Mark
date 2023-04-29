@@ -54,17 +54,15 @@ pub mod payload {
     use std::io;
     use std::path::Path;
 
-    use markdown::to_html;
-
     #[derive(serde::Serialize, Clone, Debug)]
-    pub struct FileChanged<'a> {
-        file: &'a Path,
+    pub struct FileChanged<P: AsRef<Path>> {
+        file: P,
         content: String,
     }
 
-    impl<'a> FileChanged<'a> {
-        pub fn new(file: &'a Path) -> io::Result<Self> {
-            let content = std::fs::read_to_string(file)?;
+    impl<P: AsRef<Path>> FileChanged<P> {
+        pub fn new(file: P) -> io::Result<Self> {
+            let content = std::fs::read_to_string(file.as_ref())?;
             Ok(Self {
                 content: markdown::to_html_with_options(
                     &content,

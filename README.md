@@ -28,19 +28,37 @@ Fast, easy, simple markdown viewing.
 
 ## Keyboard Bindings
 
-| shortcut                             | action            |
-| ------------------------------------ | ----------------- |
-| <kbd>H</kbd> \| <kbd>SHIFT + ←</kbd> | Previous File     |
-| <kbd>L</kbd> \| <kbd>SHIFT + →</kbd> | Next File         |
-| <kbd>h</kbd> \| <kbd>←</kbd>         | Scroll Page Left  |
-| <kbd>l</kbd> \| <kbd>→</kbd>         | Scroll Page Right |
-| <kbd>k</kbd> \| <kbd>↑</kbd>         | Scroll Page Up    |
-| <kbd>j</kbd> \| <kbd>↓</kbd>         | Scroll Page Down  |
-| <kbd>f</kbd>                         | Open File Picker  |
-| <kbd>c</kbd>                         | Close File        |
-| <kbd>o</kbd> + Link ID               | Open Link         |
-| <kbd>?</kbd>                         | View Shortcuts    |
+| shortcut                             | action               |
+| ------------------------------------ | -------------------- |
+| <kbd>H</kbd> \| <kbd>SHIFT + ←</kbd> | Previous File        |
+| <kbd>L</kbd> \| <kbd>SHIFT + →</kbd> | Next File            |
+| <kbd>h</kbd> \| <kbd>←</kbd>         | Scroll Page Left     |
+| <kbd>l</kbd> \| <kbd>→</kbd>         | Scroll Page Right    |
+| <kbd>k</kbd> \| <kbd>↑</kbd>         | Scroll Page Up       |
+| <kbd>j</kbd> \| <kbd>↓</kbd>         | Scroll Page Down     |
+| <kbd>f</kbd>                         | Open File Picker     |
+| <kbd>c</kbd>                         | Close File           |
+| <kbd>o</kbd> + Link ID               | Open Link            |
+| <kbd>q</kbd>                         | Exit the Applciation |
+| <kbd>?</kbd>                         | View Shortcuts       |
 
 [My Github](https://github.com/manwitha1000names)
 
 [My Repositories](https://github.com/manwitha1000names?tab=repositories)
+
+# TODO
+
+### Front-end
+
+- [ ] Implement keyboard shortcuts.
+- [ ] Error Handeling
+- [ ] Notification System
+- [ ] Shortcut Guide
+- [ ] Multifile widget thing
+- [ ] CSS refactor
+
+###
+
+- [ ] Implement `remove-file`
+- [ ] Flush out client-backend interface // invokes & listeners
+- [ ] Refactor & Optimize

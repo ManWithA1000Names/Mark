@@ -1,8 +1,8 @@
 import { listen } from "@tauri-apps/api/event";
-import { FilesManager } from "./lib/files-manager";
 
 import * as shim from "./lib/shim";
 import * as keyboard from "./lib/keyboard";
+import * as filesmanager from "./lib/files-manager";
 
 listen("failed-to-read", (event) => {
   console.log("RECEIVED: failed-to-read");
@@ -22,7 +22,7 @@ listen("no-files", (event) => {
 window.addEventListener("DOMContentLoaded", () => {
   shim.init();
   keyboard.init();
-  FilesManager.getInstance();
+  filesmanager.init();
 
   console.log("APPLICATION STARTED!");
 });

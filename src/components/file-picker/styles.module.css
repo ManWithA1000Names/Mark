@@ -8,7 +8,7 @@
 .search_result_list {
   list-style: none;
   margin: 0;
-  padding: 8px;
+  padding: 0px;
 }
 
 .search_result_list li {
@@ -16,6 +16,7 @@
   border: 1px solid var(--github-gray);
   margin: 4px 0;
   transition: all 0.1s ease-in-out;
+  overflow: hidden;
 }
 
 .search_result_list li.active_selection {
@@ -41,8 +42,8 @@
 }
 
 .search_result_list li button.recent_files_button {
-  display: grid; 
-  grid-template-columns: 1fr max-content; 
+  display: grid;
+  grid-template-columns: 1fr max-content;
 }
 
 .search_result_list li button.recent_files_button span {
@@ -55,4 +56,46 @@
   border: 1px solid var(--github-green);
   border-radius: 6px;
   padding: 0 2px;
+}
+
+.search_result_list li button.open {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  position: relative;
+  gap: 8px;
+}
+
+.search_result_list li button.active {
+  display: grid;
+  grid-template-columns: 1fr min-content min-content;
+  gap: 8px;
+  position: relative;
+}
+
+.search_result_list li button.active:first-child {
+  overflow: auto;
+}
+
+.search_result_list li button.open:first-child {
+  overflow: auto;
+}
+
+.open_badge {
+  font-size: 0.75rem;
+  background-color: var(--github-green) !important;
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  padding: 2px 4px !important;
+  height: calc(100% - 4px);
+  align-self: center;
+}
+
+.active_badge {
+  font-size: 0.75rem;
+  background-color: var(--github-blue) !important;
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  padding: 2px 4px !important;
+  height: calc(100% - 4px);
+  align-self: center;
 }

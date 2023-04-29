@@ -1,39 +1,73 @@
-import { Payloads } from "../../types";
+import { BackendFile, SearchResults } from "../../types";
 import styles from "./styles.module.css";
 
 let previous_selection = 0;
 const root = document.getElementById("search-results-root");
 
-export function render(resulsts: Payloads.SearchResults, selected: number) {
+export function render(
+  resulsts: SearchResults,
+  selected: number,
+  openFiles: Map<string, BackendFile>,
+  currentFile: BackendFile
+) {
   if (!root) return;
+
   previous_selection = selected;
-  let html = `<ul class="${styles.search_result_list}">`;
+
+  const ul = document.createElement("ul");
+  ul.classList.add(styles.search_result_list);
 
   resulsts.forEach((result, index) => {
-    const spans = result.file
-      .split("")
-      .map(
-        (letter, index) =>
-          `<span class="${
-            result.indices.includes(index) ? styles.active_letter : ""
-          }">${letter}</span>`
-      )
-      .join("");
+    const spans = result.file.split("").map((letter, index) => {
+      const span = document.createElement("span");
+      if (result.indices.includes(index)) {
+        span.classList.add(styles.active_letter);
+      }
+      span.innerText = letter;
+      return span;
+    });
 
-    html += `<li class="${index === selected ? styles.active_selection : ""}">
-      <button id="search-result-${index}">${spans}</button>
-    </li>
-    `;
+    const li = document.createElement("li");
+    if (index == selected) {
+      li.classList.add(styles.active_selection);
+    }
+
+    const button = document.createElement("button");
+    button.id = `search-result-${index}`;
+    if (currentFile.file === result.file) {
+      button.disabled = true;
+      button.style.cursor = "not-allowed";
+    }
+
+    if (openFiles.has(result.file)) {
+      const span = document.createElement("span");
+      span.append(...spans);
+      const div2 = document.createElement("div");
+      div2.innerText = "open";
+      div2.classList.add(styles.open_badge);
+      button.append(span, div2);
+      if (currentFile.file === result.file) {
+        const div3 = document.createElement("div");
+        div3.innerText = "active";
+        div3.classList.add(styles.active_badge);
+        button.appendChild(div3);
+        button.classList.add(styles.active);
+      } else {
+        button.classList.add(styles.open);
+      }
+    } else {
+      button.append(...spans);
+    }
+
+    li.appendChild(button);
+    ul.appendChild(li);
   });
-
-  html += "</ul>";
-  root.innerHTML = html;
+  root.replaceChildren(ul);
 }
 
-export const renderSelectionChange = (selected: number) => {
-  const prev_btn = document.getElementById(
-    `search-result-${previous_selection}`
-  )!;
+export const renderSelectionChange = <T extends number>(selected: T) => {
+  const prev_btn = document.getElementById(`search-result-${previous_selection}`);
+  if (!prev_btn) return;
   const prev_li = prev_btn.parentNode as HTMLLIElement;
   prev_li.classList.remove(styles.active_selection);
   const btn = document.getElementById(`search-result-${selected}`)!;

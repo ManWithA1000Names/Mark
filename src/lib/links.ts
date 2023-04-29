@@ -9,9 +9,7 @@ class Links {
   private id_length = 0;
 
   private IDlength(): number {
-    const res = Math.ceil(
-      Math.log(this.num_of_links) / Math.log(NUMBER_OF_LETTERS_IN_ALPHABET)
-    );
+    const res = Math.ceil(Math.log(this.num_of_links) / Math.log(NUMBER_OF_LETTERS_IN_ALPHABET));
     this.id_length = res;
     return res;
   }
@@ -40,9 +38,7 @@ class Links {
 
     for (let i = 0; i < paddedId.length; i++) {
       const digit = paddedId.charCodeAt(i) - A_IN_ASCII;
-      num +=
-        digit *
-        Math.pow(NUMBER_OF_LETTERS_IN_ALPHABET, paddedId.length - i - 1);
+      num += digit * Math.pow(NUMBER_OF_LETTERS_IN_ALPHABET, paddedId.length - i - 1);
     }
 
     return num;
@@ -83,10 +79,11 @@ class Links {
       const id = this.generateID(i, this.id_length);
       const kbd = document.createElement("kbd");
       kbd.style.right = this.id_length * -10 + "px";
-      kbd.innerHTML = id
-        .split("")
-        .map((letter) => `<span>${letter}</span>`)
-        .join("");
+      for (const letter in id.split("")) {
+        const span = document.createElement("span");
+        span.innerText = letter;
+        kbd.appendChild(span);
+      }
       anchors[i].appendChild(kbd);
     }
   }

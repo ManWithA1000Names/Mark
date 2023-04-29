@@ -11,6 +11,7 @@ body {
   --link-blue: #58a6ff;
   --github-gray-light: #161b22;
   --github-green: #238636;
+  --github-blue: #111d2f;
 }
 
 .markdown-body-container {
@@ -103,10 +104,11 @@ span.active-letter {
   box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--github-gray);
   border-radius: 6px;
-  overflow: auto;
+  /* overflow: auto; */
 
   color: white;
   z-index: 10;
+  overflow: auto;
 }
 
 #file-picker-root[data-visible="true"] + main article {
@@ -129,23 +131,23 @@ span.active-letter {
 }
 
 #search-results-root {
-  max-height: 200px;
   overflow: auto;
 }
 
 #file-picker-root form {
   background-color: var(--github-gray-light);
   padding: 8px;
-  margin-bottom: 16px;
 }
 
-#file-picker-root form div {
+#search-results-root {
+  max-height: 50vh;
+  overflow: auto;
   background-color: var(--background);
   padding: 8px;
   border-radius: 6px;
 }
 
-#file-picker-root input {
+#file-picker-root form input {
   width: calc(100% - 8px);
   border: 1px solid var(--github-gray);
   border-radius: 6px;
@@ -153,5 +155,15 @@ span.active-letter {
   font-size: 1.5rem;
   color: white;
   padding-left: 8px;
+}
+
+#file-picker-files > div {
+  padding: 8px;
+  background-color: var(--github-gray-light);
+}
+
+#file-picker-files h4 {
+  padding: 8px 0px 4px 8px;
+  margin: 0;
 }
 /* ------------------- */

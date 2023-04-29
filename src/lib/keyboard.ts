@@ -1,7 +1,9 @@
 import Links from "./links";
+import * as fp from "./filepicker";
+import { checkKey } from "./utils";
+import { invoke } from "@tauri-apps/api";
 
-const hasMods = (e: KeyboardEvent) =>
-  e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
+const hasMods = (e: KeyboardEvent) => e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
 
 const handle_scroll_left = (e: KeyboardEvent) => {
   if (hasMods(e)) return false;
@@ -43,22 +45,27 @@ const handle_scroll_page_down = (e: KeyboardEvent) => {
   return true;
 };
 
-const handle_link_mode = (e: KeyboardEvent) => {
-  if (hasMods(e)) return;
-  if (e.key !== "o") return;
-  Links.show();
-  return true;
-};
+let mode: "default" | "link" = "default";
 
 export const init = () => {
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      Links.hide();
-      return;
+    if (mode === "link") {
+      if (checkKey(e, "Escape")) {
+        mode = "default";
+        return Links.hide();
+      }
+      if (Links.on_keydown(e)) return;
     }
-    if ((e.target as HTMLElement).matches("input")) return;
 
-    if (Links.on_keydown(e)) return;
+    if (checkKey(e, "Escape") && !fp.$filepicker.hidden) return fp.hide();
+    if (checkKey(e, "0", "ctrlKey")) return fp.openRecentFile(0);
+    if (checkKey(e, "1", "ctrlKey")) return fp.openRecentFile(1);
+    if (checkKey(e, "2", "ctrlKey")) return fp.openRecentFile(2);
+
+    if ((e.target as HTMLElement).matches?.("input")) return;
+
+    if (e.key === "f") return fp.show();
+    if (e.key === "c") return fp.closeActiveFile();
 
     if (handle_scroll_left(e)) return;
     if (handle_scroll_right(e)) return;
@@ -66,7 +73,12 @@ export const init = () => {
     if (handle_scroll_down(e)) return;
     if (handle_scroll_page_up(e)) return;
     if (handle_scroll_page_down(e)) return;
-    if (handle_link_mode(e)) return;
+    if (checkKey(e, "o")) {
+      mode = "link";
+      Links.show();
+    }
+
+    if (checkKey(e,"q")) invoke("exit");
 
     // idk...
   });

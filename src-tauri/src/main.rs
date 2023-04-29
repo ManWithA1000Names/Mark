@@ -6,7 +6,7 @@ use std::{
     path::PathBuf,
     sync::{Arc, Mutex},
 };
-use tauri::Manager;
+// use tauri::Manager;
 
 mod emit;
 mod fs_search;
@@ -18,8 +18,8 @@ struct SearcherState(Arc<Mutex<Option<FsFuzzySearcher>>>);
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn exit() {
+    std::process::exit(0);
 }
 
 #[tauri::command]
@@ -33,6 +33,23 @@ fn search_files(
     } else {
         Err("Loading...")
     }
+}
+
+#[tauri::command]
+fn open_file<'a>(
+    file: &'a str,
+    tx: tauri::State<Sender<PathBuf>>,
+) -> Result<emit::payload::FileChanged<&'a str>, &'static str> {
+    let buf = PathBuf::from(file);
+    if let Err(e) = tx.try_send(buf) {
+        println!("[ERROR]: {:?}", e);
+    }
+    emit::payload::FileChanged::new(file).map_err(|_| "Failed to open file")
+}
+
+#[tauri::command]
+fn edit_file(file: &str) -> Result<(), &'static str> {
+    opener::open(file).map_err(|_| "Failed to topen file in the system default program")
 }
 
 fn validate_arg(arg: String) -> PathBuf {
@@ -62,27 +79,27 @@ fn validate_arg(arg: String) -> PathBuf {
     std::process::exit(1);
 }
 
-fn handle_new_file_dir_with_wacther(
-    event: tauri::Event,
-    app: &tauri::AppHandle,
-    tx: &Sender<PathBuf>,
-) {
-    let Some(payload) = event.payload() else {
-        return;
-    };
-    if let Err(e) = tx.try_send(PathBuf::from(payload)) {
-        eprintln!("[ERROR]: {:?}", e);
-    } else {
-        emit::file_changed(app, payload);
-    }
-}
+// fn handle_new_file_dir_with_wacther(
+//     event: tauri::Event,
+//     app: &tauri::AppHandle,
+//     tx: &Sender<PathBuf>,
+// ) {
+//     let Some(payload) = event.payload() else {
+//         return;
+//     };
+//     if let Err(e) = tx.try_send(PathBuf::from(payload)) {
+//         eprintln!("[ERROR]: {:?}", e);
+//     } else {
+//         emit::file_changed(app, payload);
+//     }
+// }
 
-fn handle_new_file_dir_no_watcher(event: tauri::Event, app: &tauri::AppHandle) {
-    let Some(payload) = event.payload() else {
-        return;
-    };
-    emit::file_changed(app, payload);
-}
+// fn handle_new_file_dir_no_watcher(event: tauri::Event, app: &tauri::AppHandle) {
+//     let Some(payload) = event.payload() else {
+//         return;
+//     };
+//     emit::file_changed(app, payload);
+// }
 
 #[derive(Clone, Debug, serde::Serialize)]
 struct InitialFile {
@@ -139,36 +156,31 @@ fn main() {
         *lock = Some(FsFuzzySearcher::new().unwrap());
     });
 
+    let (tx, rx) = crossbeam_channel::unbounded();
     tauri::Builder::default()
         .manage(inputs.clone())
         .manage(search_state)
+        .manage(tx)
         .setup(move |app| {
-            let handle = app.handle();
-
-            let (tx, rx) = crossbeam_channel::unbounded();
             match watcher::TheAllMightyWatcher::new(rx, app.handle()) {
                 Ok(mut watcher) => {
-                    app.listen_global("new-file-dir", move |event| {
-                        handle_new_file_dir_with_wacther(event, &handle, &tx);
-                    });
                     watcher.inputs(inputs);
                     watcher.spawn();
                 }
                 Err(e) => {
                     eprintln!("[ERROR]: {:?}", e);
-                    app.listen_global("new-file-dir", move |event| {
-                        handle_new_file_dir_no_watcher(event, &handle);
-                    });
                 }
             };
 
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            greet,
+            exit,
             init_inputs,
             open_link,
-            search_files
+            search_files,
+            open_file,
+            edit_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

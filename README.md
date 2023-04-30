@@ -20,7 +20,7 @@ Fast, easy, simple markdown viewing.
 
 ## File Picker
 
-![file picker img](https://github.com/ManWithA1000Names/Mark/blob/main/.github/filepicker.png?raw=true)
+![file picker img](https://raw.githubusercontent.com/ManWithA1000Names/Mark/main/.github/filepicker.png?token=GHSAT0AAAAAACBC4DUIJ66N4C3TYDRYRAWAZCOWE2Q)
 
 ## Keyboard Bindings
 

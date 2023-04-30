@@ -63,3 +63,5 @@ Fast, easy, simple markdown viewing.
 - [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners
 - [ ] Refactor & Optimize
+
+fuck you yes no yes yes yes fuck yes no way

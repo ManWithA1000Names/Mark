@@ -12,6 +12,7 @@ const DEFAULT_CURRENT_FILE: BackendFile = {
   content: "No content.",
 };
 
+const $bottom = document.getElementById("bottom") as HTMLDivElement;
 export const $form = document.querySelector("form") as HTMLFormElement;
 export const $input = document.querySelector("input") as HTMLInputElement;
 export const $filepicker = document.getElementById("file-picker-root") as HTMLDivElement;
@@ -198,8 +199,8 @@ export namespace on {
   };
 
   export const fileChanged = (e: Event<BackendFile>) => {
-    console.log(e.payload.file, "changed!");
     openFiles.set(e.payload.file, e.payload);
     if (e.payload.file === activeFile$.value.file) activeFile$.value = e.payload;
+    $bottom.scrollIntoView({ behavior: "smooth" });
   };
 }

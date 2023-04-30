@@ -20,7 +20,7 @@ Fast, easy, simple markdown viewing.
 
 ## File Picker
 
-![file picker img](https://okay)
+![file picker img](https://github.com/ManWithA1000Names/Mark/blob/main/.github/filepicker.png?raw=true)
 
 ## Keyboard Bindings
 
@@ -54,7 +54,7 @@ Fast, easy, simple markdown viewing.
 - [ ] CSS refactor
 - [ ] Option to "stick to bottom"
 
-###
+### Back-end
 
 - [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners

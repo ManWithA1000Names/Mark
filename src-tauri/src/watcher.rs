@@ -12,12 +12,14 @@ pub struct TheAllMightyWatcher {
     watcher: RecommendedWatcher,
     events: Receiver<Result<notify::Event, notify::Error>>,
     new_inputs: Receiver<PathBuf>,
+    remove_inputs: Receiver<PathBuf>,
     app: tauri::AppHandle,
 }
 
 impl TheAllMightyWatcher {
     pub fn new(
         new_inputs: Receiver<PathBuf>,
+        remove_inputs: Receiver<PathBuf>,
         app: tauri::AppHandle,
     ) -> Result<Self, notify::Error> {
         let (events_tx, events) = crossbeam_channel::unbounded();
@@ -28,6 +30,7 @@ impl TheAllMightyWatcher {
             watcher,
             events,
             new_inputs,
+            remove_inputs,
             app,
         })
     }
@@ -37,7 +40,7 @@ impl TheAllMightyWatcher {
             // SAFETY: unwrap is fine, because we are sure the input is a file.
             let parent = input.parent().unwrap().canonicalize()?;
             match self.watching.get_mut(&parent) {
-                Some(None) => {}
+                Some(None) => { /* this means that all md files in the dir are tacked any way. */ }
                 Some(Some(set)) => {
                     set.insert(input);
                 }
@@ -89,6 +92,22 @@ impl TheAllMightyWatcher {
         }
     }
 
+    pub fn remove(&mut self, path: PathBuf) {
+        if path.is_file() {
+            let Ok(ref parent) = path.parent().unwrap().canonicalize() else {
+                return;
+            };
+            if let Some(Some(files)) = self.watching.get_mut(parent) {
+                files.remove(&path);
+            }
+        } else if path.is_dir() {
+            let Ok(ref path) = path.canonicalize() else {
+                return;
+            };
+            self.watching.remove(path);
+        }
+    }
+
     pub fn spawn(mut self) {
         std::thread::spawn(move || loop {
             if let Ok(event) = self.events.try_recv() {
@@ -99,6 +118,9 @@ impl TheAllMightyWatcher {
                     eprintln!("[ERROR]: {}", e);
                     emit::failed_to_watch(&self.app, path);
                 };
+            }
+            if let Ok(path) = self.remove_inputs.try_recv() {
+                self.remove(path)
             }
         });
     }

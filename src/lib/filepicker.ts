@@ -1,5 +1,5 @@
 import type { BackendFile, SearchResults } from "../types";
-import type { Event } from "@tauri-apps/api/event";
+import { emit, Event } from "@tauri-apps/api/event";
 
 import { checkKey, wrap } from "./utils";
 import { search } from "./search";
@@ -77,7 +77,7 @@ export const closeActiveFile = () => {
   if (openFiles.size === 0) return;
 
   const file = activeFile$.value.file;
-  invoke("remove-file", { file }).catch(console.error);
+  emit("remove-file", file);
 
   addRecentFile(file);
   openFiles.delete(file);
@@ -198,6 +198,7 @@ export namespace on {
   };
 
   export const fileChanged = (e: Event<BackendFile>) => {
+    console.log(e.payload.file, "changed!");
     openFiles.set(e.payload.file, e.payload);
     if (e.payload.file === activeFile$.value.file) activeFile$.value = e.payload;
   };

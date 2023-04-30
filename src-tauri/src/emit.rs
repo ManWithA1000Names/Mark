@@ -17,7 +17,7 @@ pub fn file_changed<P: AsRef<std::path::Path>>(app: &tauri::AppHandle, file: P) 
             failed_to_read(app, file);
         }
         Ok(payload) => {
-            println!("[EMITTING]: FILE-CHANGED -> {:?}", payload);
+            println!("[EMITTING]: FILE-CHANGED -> {}", file.as_ref().display());
             emit!(app, "file-changed", payload);
         }
     }
@@ -37,7 +37,7 @@ pub fn failed_to_open_link(app: &tauri::AppHandle) {
 }
 
 pub fn failed_to_watch<P: AsRef<std::path::Path>>(app: &tauri::AppHandle, file: P) {
-    println!("[EMITTING]: FAILED-TO-WATCH -> {:?}", file.as_ref());
+    println!("[EMITTING]: FAILED-TO-WATCH -> {}", file.as_ref().display());
     emit!(
         app,
         "failed-to-watch",

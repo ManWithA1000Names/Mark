@@ -6,6 +6,7 @@ use std::{
     path::PathBuf,
     sync::{Arc, Mutex},
 };
+use tauri::Manager;
 // use tauri::Manager;
 
 mod emit;
@@ -28,7 +29,6 @@ fn search_files(
     input: &str,
 ) -> Result<SearchResults, &'static str> {
     if let Some(ref searcher) = *state.0.lock().unwrap() {
-        println!("Searching...");
         Ok(searcher.search(input))
     } else {
         Err("Loading...")
@@ -156,13 +156,22 @@ fn main() {
         *lock = Some(FsFuzzySearcher::new().unwrap());
     });
 
-    let (tx, rx) = crossbeam_channel::unbounded();
+    let (tx_inputs, rx_inputs) = crossbeam_channel::unbounded();
+    let (tx_remove, rx_remove) = crossbeam_channel::unbounded();
+
     tauri::Builder::default()
         .manage(inputs.clone())
         .manage(search_state)
-        .manage(tx)
+        .manage(tx_inputs)
         .setup(move |app| {
-            match watcher::TheAllMightyWatcher::new(rx, app.handle()) {
+            app.listen_global("remove-file", move |e| {
+                if let Some(Ok(string)) = e.payload().map(serde_json::from_str::<String>) {
+                    if let Err(e) = tx_remove.try_send(PathBuf::from(string)) {
+                        eprintln!("[ERROR]: {:?}", e);
+                    }
+                }
+            });
+            match watcher::TheAllMightyWatcher::new(rx_inputs, rx_remove, app.handle()) {
                 Ok(mut watcher) => {
                     watcher.inputs(inputs);
                     watcher.spawn();

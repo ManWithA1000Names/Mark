@@ -51,14 +51,15 @@ Fast, easy, simple markdown viewing.
 ### Front-end
 
 - [ ] Implement keyboard shortcuts.
-- [ ] Error Handeling
+- [ ] Error Handling
 - [ ] Notification System
 - [ ] Shortcut Guide
-- [ ] Multifile widget thing
+- [ ] Multi-file widget thing
 - [ ] CSS refactor
+- [ ] Option to "stick to bottom"
 
 ###
 
-- [ ] Implement `remove-file`
+- [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners
 - [ ] Refactor & Optimize

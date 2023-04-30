@@ -79,7 +79,7 @@ class Links {
       const id = this.generateID(i, this.id_length);
       const kbd = document.createElement("kbd");
       kbd.style.right = this.id_length * -10 + "px";
-      for (const letter in id.split("")) {
+      for (const letter of id.split("")) {
         const span = document.createElement("span");
         span.innerText = letter;
         kbd.appendChild(span);

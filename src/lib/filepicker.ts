@@ -6,25 +6,34 @@ import { search } from "./search";
 import { RenderedObservable } from "./observable";
 import * as render from "../components";
 import { invoke } from "@tauri-apps/api";
+import { locked_at_bottom } from "./lock-at-bottom";
 
 const DEFAULT_CURRENT_FILE: BackendFile = {
   file: "no file selected",
   content: "No content.",
 };
 
+const recentFiles: string[] = [];
+const openFiles = new Map<string, BackendFile>();
+
+const keyToIndex = (file: string) => Array.from(openFiles.keys()).indexOf(file);
+const indexToKey = (index: number) => Array.from(openFiles.keys())[index];
+
 const $bottom = document.getElementById("bottom") as HTMLDivElement;
+const $pager = document.getElementById("file-pager") as HTMLDivElement;
 export const $form = document.querySelector("form") as HTMLFormElement;
 export const $input = document.querySelector("input") as HTMLInputElement;
 export const $filepicker = document.getElementById("file-picker-root") as HTMLDivElement;
 
+//TODO: active index is all over the place, thus we need to replace openFiles with an array of sorts.
+export const activeIndex$ = new RenderedObservable(0, (index) => {
+  $pager.innerText = `${index + 1}/${openFiles.size}`;
+});
 export const selected$ = new RenderedObservable(0, render.selectionChange);
 export const activeFile$ = new RenderedObservable(DEFAULT_CURRENT_FILE, render.activeFile);
 export const searchResults$ = new RenderedObservable<SearchResults>([], (res) => {
   render.searchResults(res, selected$.value, openFiles, activeFile$.value);
 });
-
-const recentFiles: string[] = [];
-const openFiles = new Map<string, BackendFile>();
 
 const addRecentFile = (file: string) => {
   if (recentFiles.length === 3) {
@@ -51,6 +60,32 @@ const __search = async (input: string = "") => {
     .catch(console.error);
 };
 
+export const nextFile = () => {
+  if (openFiles.size === 0) return;
+
+  let index = keyToIndex(activeFile$.value.file);
+  index = wrap(index + 1, 0, openFiles.size - 1);
+  activeIndex$.value = index;
+  const key = indexToKey(index);
+  const file = openFiles.get(key)!;
+  if (file.file !== activeFile$.value.file) {
+    activeFile$.value = file;
+  }
+};
+
+export const prevFile = () => {
+  if (openFiles.size === 0) return;
+
+  let index = keyToIndex(activeFile$.value.file);
+  index = wrap(index - 1, 0, openFiles.size - 1);
+  activeIndex$.value = index;
+  const key = indexToKey(index);
+  const file = openFiles.get(key)!;
+  if (file.file !== activeFile$.value.file) {
+    activeFile$.value = file;
+  }
+};
+
 export const openRecentFile = (index: number) => {
   if (index < 0 || index >= recentFiles.length) return;
   setActiveFile(recentFiles[index]);
@@ -59,14 +94,18 @@ export const openRecentFile = (index: number) => {
 };
 
 export const setActiveFile = (file: string) => {
+  console.log("what??");
   if (file === activeFile$.value.file) return;
+  console.log("what?");
   if (openFiles.has(file)) {
+    activeIndex$.value = keyToIndex(file);
     activeFile$.value = openFiles.get(file)!;
   } else {
     invoke<BackendFile>("open_file", { file })
       .then((f) => {
         activeFile$.value = f;
         openFiles.set(f.file, f);
+        activeIndex$.value++;
         removeRecentFile(f.file);
       })
       .catch(console.error);
@@ -95,6 +134,7 @@ export const initialize = (files: BackendFile[]) => {
     for (const file of files) {
       openFiles.set(file.file, file);
     }
+    activeIndex$.value = 0;
   }
 };
 
@@ -201,6 +241,6 @@ export namespace on {
   export const fileChanged = (e: Event<BackendFile>) => {
     openFiles.set(e.payload.file, e.payload);
     if (e.payload.file === activeFile$.value.file) activeFile$.value = e.payload;
-    $bottom.scrollIntoView({ behavior: "smooth" });
+    if (locked_at_bottom) $bottom.scrollIntoView({ behavior: "smooth" });
   };
 }

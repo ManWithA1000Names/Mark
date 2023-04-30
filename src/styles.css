@@ -167,3 +167,51 @@ span.active-letter {
   margin: 0;
 }
 /* ------------------- */
+
+#bottom {
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  margin-top: 8px;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+
+#bottom button {
+  padding: 5px 16px;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+  border-radius: 6px;
+  margin: 0;
+  background: none;
+  outline: none;
+  border: none;
+  fill: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  color: var(--link-blue);
+  cursor: pointer;
+  transition: background-color 80ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+#bottom button:hover {
+  background-color: var(--github-gray);
+  transition: rotate 0.25s ease;
+}
+
+#bottom button:hover span {
+  text-decoration: underline;
+  text-decoration-color: var(--link-blue);
+}
+
+#bottom button svg {
+  transition: rotate 0.25s ease;
+}
+
+#bottom button.locked svg {
+  rotate: 45deg;
+}

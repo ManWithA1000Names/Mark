@@ -3,6 +3,7 @@ import { listen } from "@tauri-apps/api/event";
 import * as shim from "./lib/shim";
 import * as keyboard from "./lib/keyboard";
 import * as filesmanager from "./lib/files-manager";
+import * as locked from "./lib/lock-at-bottom";
 
 listen("failed-to-read", (event) => {
   console.log("RECEIVED: failed-to-read");
@@ -21,6 +22,7 @@ listen("no-files", (event) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   shim.init();
+  locked.init();
   keyboard.init();
   filesmanager.init();
 

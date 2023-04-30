@@ -20,7 +20,7 @@ Fast, easy, simple markdown viewing.
 
 ## File Picker
 
-![file picker img](https://raw.githubusercontent.com/ManWithA1000Names/Mark/main/.github/filepicker.png?token=GHSAT0AAAAAACBC4DUIJ66N4C3TYDRYRAWAZCOWE2Q)
+![file picker img](https://github.com/manwitha1000names/Mark/raw/master/.github/filepicker.png)
 
 ## Keyboard Bindings
 
@@ -52,10 +52,12 @@ Fast, easy, simple markdown viewing.
 - [ ] Shortcut Guide
 - [ ] Multi-file widget thing
 - [ ] CSS refactor
-- [ ] Option to "stick to bottom"
+- [x] Option to "stick to bottom"
 
 ### Back-end
 
 - [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners
 - [ ] Refactor & Optimize
+
+hello what no way this is crazy yes sir

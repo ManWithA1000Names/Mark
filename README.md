@@ -20,11 +20,7 @@ Fast, easy, simple markdown viewing.
 
 ## File Picker
 
-![file picker img](url)
-
-## Multiple Files
-
-![multiple files indicator](url)
+![file picker img](https://okay)
 
 ## Keyboard Bindings
 
@@ -63,5 +59,3 @@ Fast, easy, simple markdown viewing.
 - [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners
 - [ ] Refactor & Optimize
-
-fuck you yes no yes yes yes fuck yes no way

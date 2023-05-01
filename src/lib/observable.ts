@@ -11,8 +11,10 @@ export class Observable<T> {
   private mkproxy(value: T & object): T {
     for (const key in value) {
       if (typeof value[key] === "object" && value[key] !== null) {
-        value[key] = this.mkproxy(value[key] as T & object) as (T &
-          object)[Extract<keyof T, string>];
+        value[key] = this.mkproxy(value[key] as T & object) as (T & object)[Extract<
+          keyof T,
+          string
+        >];
       }
     }
     return new Proxy(value, {
@@ -58,9 +60,14 @@ export class Observable<T> {
 }
 
 export class RenderedObservable<T> extends Observable<T> {
+  _render: (value: T) => void;
   constructor(value: T, render: (value: T) => void) {
     super(value);
-    super.subscribe(render);
+    this._render = render;
+    super.subscribe(this._render);
+  }
+  rerender() {
+    this._render(super.value);
   }
 }
 

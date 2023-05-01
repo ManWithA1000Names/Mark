@@ -81,7 +81,7 @@ const handle_scroll_page_down = (e: KeyboardEvent) => {
 
 const handle_scroll_to_top = (e: KeyboardEvent) => {
   if (!checkKey(e, "g")) return false;
-  document.querySelector("main")?.scrollIntoView({ behavior: "smooth" });
+  document.documentElement.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   return true;
 };
 
@@ -113,8 +113,10 @@ export const init = () => {
     if (e.key === "f") return fp.show();
     if (e.key === "c") return fp.closeActiveFile();
 
-    if (checkKey(e, "H", "shiftKey")) return fp.nextFile();
-    if (checkKey(e, "L", "shiftKey")) return fp.prevFile();
+    if (checkKey(e, "H", "shiftKey")) return fp.prevFile();
+    if (checkKey(e, "L", "shiftKey")) return fp.nextFile();
+    if (checkKey(e, "ArrowLeft", "shiftKey")) return fp.prevFile();
+    if (checkKey(e, "ArrowRight", "shiftKey")) return fp.nextFile();
 
     if (handle_scroll_up(e)) return;
     if (handle_scroll_down(e)) return;
@@ -133,6 +135,8 @@ export const init = () => {
     if (checkKey(e, "q")) return invoke("exit");
 
     if (checkKey(e, "b")) return locked.toggle();
+
+    if (checkKey(e, "e")) return document.getElementById("edit-file-button")?.click();
 
     // idk...
   });

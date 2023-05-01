@@ -5,11 +5,13 @@ export const checkKey = (
 ): boolean => {
   if (e.key !== key && e.code !== key) return false;
 
-  for (const mod of ["ctrlKey", "metaKey", "altKey", "shiftKey"] as const) {
-    if (modifiers.includes(mod) && e[mod]) continue;
-    if (e[mod]) return false;
-  }
-  return true;
+  let is_good = true;
+  is_good &&= modifiers.includes("ctrlKey") ? e.ctrlKey : !e.ctrlKey;
+  is_good &&= modifiers.includes("metaKey") ? e.metaKey : !e.metaKey;
+  is_good &&= modifiers.includes("altKey") ? e.altKey : !e.altKey;
+  is_good &&= modifiers.includes("shiftKey") ? e.shiftKey : !e.shiftKey;
+
+  return is_good;
 };
 
 export const wrap = (num: number, min: number, max: number) => {

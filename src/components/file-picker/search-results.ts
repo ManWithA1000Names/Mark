@@ -7,7 +7,7 @@ const root = document.getElementById("search-results-root");
 export function render(
   resulsts: SearchResults,
   selected: number,
-  openFiles: Map<string, BackendFile>,
+  openFiles: BackendFile[],
   currentFile: BackendFile
 ) {
   if (!root) return;
@@ -39,7 +39,7 @@ export function render(
       button.style.cursor = "not-allowed";
     }
 
-    if (openFiles.has(result.file)) {
+    if (!!openFiles.find(f => f.file === result.file)) {
       const span = document.createElement("span");
       span.append(...spans);
       const div2 = document.createElement("div");

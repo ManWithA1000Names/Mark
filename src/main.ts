@@ -1,30 +1,19 @@
-import { listen } from "@tauri-apps/api/event";
-
 import * as shim from "./lib/shim";
 import * as keyboard from "./lib/keyboard";
 import * as filesmanager from "./lib/files-manager";
 import * as locked from "./lib/lock-at-bottom";
+import * as listen from "./lib/listen";
 
-listen("failed-to-read", (event) => {
-  console.log("RECEIVED: failed-to-read");
-  console.log(event);
-});
-
-listen("failed-to-watch", (event) => {
-  console.log("RECEIVED: failed-to-watch");
-  console.log(event);
-});
-
-listen("no-files", (event) => {
-  console.log("RECEIVED: no-files");
-  console.log(event);
-});
+import notify from "./components/notifications";
 
 window.addEventListener("DOMContentLoaded", () => {
   shim.init();
+  listen.init();
   locked.init();
   keyboard.init();
   filesmanager.init();
-
+  notify("success", "success");
+  notify("error", "error");
+  notify("info", "info");
   console.log("APPLICATION STARTED!");
 });

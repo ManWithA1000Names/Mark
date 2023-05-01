@@ -7,6 +7,7 @@ import { RenderedObservable } from "./observable";
 import * as render from "../components";
 import { invoke } from "@tauri-apps/api";
 import { locked_at_bottom } from "./lock-at-bottom";
+import notify from "../components/notifications";
 
 const DEFAULT_CURRENT_FILE: BackendFile = {
   file: "no file selected",
@@ -14,10 +15,7 @@ const DEFAULT_CURRENT_FILE: BackendFile = {
 };
 
 const recentFiles: string[] = [];
-const openFiles = new Map<string, BackendFile>();
-
-const keyToIndex = (file: string) => Array.from(openFiles.keys()).indexOf(file);
-const indexToKey = (index: number) => Array.from(openFiles.keys())[index];
+const openFiles: BackendFile[] = [];
 
 const $bottom = document.getElementById("bottom") as HTMLDivElement;
 const $pager = document.getElementById("file-pager") as HTMLDivElement;
@@ -25,12 +23,12 @@ export const $form = document.querySelector("form") as HTMLFormElement;
 export const $input = document.querySelector("input") as HTMLInputElement;
 export const $filepicker = document.getElementById("file-picker-root") as HTMLDivElement;
 
-//TODO: active index is all over the place, thus we need to replace openFiles with an array of sorts.
-export const activeIndex$ = new RenderedObservable(0, (index) => {
-  $pager.innerText = `${index + 1}/${openFiles.size}`;
+export const activeFile$ = new RenderedObservable(DEFAULT_CURRENT_FILE, render.activeFile);
+export const activeIndex$ = new RenderedObservable(-1, (index) => {
+  $pager.innerText = `${index + 1}/${openFiles.length}`;
+  activeFile$.value = index < 0 ? DEFAULT_CURRENT_FILE : openFiles[index];
 });
 export const selected$ = new RenderedObservable(0, render.selectionChange);
-export const activeFile$ = new RenderedObservable(DEFAULT_CURRENT_FILE, render.activeFile);
 export const searchResults$ = new RenderedObservable<SearchResults>([], (res) => {
   render.searchResults(res, selected$.value, openFiles, activeFile$.value);
 });
@@ -57,33 +55,24 @@ const __search = async (input: string = "") => {
       selected$.value = 0;
       searchResults$.value = results;
     })
-    .catch(console.error);
+    .catch((e) => {
+      console.error(e);
+      notify("Failed to execute search!", "error");
+    });
 };
 
 export const nextFile = () => {
-  if (openFiles.size === 0) return;
-
-  let index = keyToIndex(activeFile$.value.file);
-  index = wrap(index + 1, 0, openFiles.size - 1);
+  if (openFiles.length === 0) return;
+  const index = wrap(activeIndex$.value + 1, 0, openFiles.length - 1);
+  if (index === activeIndex$.value) return;
   activeIndex$.value = index;
-  const key = indexToKey(index);
-  const file = openFiles.get(key)!;
-  if (file.file !== activeFile$.value.file) {
-    activeFile$.value = file;
-  }
 };
 
 export const prevFile = () => {
-  if (openFiles.size === 0) return;
-
-  let index = keyToIndex(activeFile$.value.file);
-  index = wrap(index - 1, 0, openFiles.size - 1);
+  if (openFiles.length === 0) return;
+  const index = wrap(activeIndex$.value - 1, 0, openFiles.length - 1);
+  if (index === activeIndex$.value) return;
   activeIndex$.value = index;
-  const key = indexToKey(index);
-  const file = openFiles.get(key)!;
-  if (file.file !== activeFile$.value.file) {
-    activeFile$.value = file;
-  }
 };
 
 export const openRecentFile = (index: number) => {
@@ -94,46 +83,49 @@ export const openRecentFile = (index: number) => {
 };
 
 export const setActiveFile = (file: string) => {
-  console.log("what??");
   if (file === activeFile$.value.file) return;
-  console.log("what?");
-  if (openFiles.has(file)) {
-    activeIndex$.value = keyToIndex(file);
-    activeFile$.value = openFiles.get(file)!;
+  let index = openFiles.findIndex((f) => f.file === file);
+
+  if (index >= 0) {
+    activeIndex$.value = index;
   } else {
     invoke<BackendFile>("open_file", { file })
       .then((f) => {
-        activeFile$.value = f;
-        openFiles.set(f.file, f);
-        activeIndex$.value++;
+        openFiles.push(f);
+        activeIndex$.value = openFiles.length - 1;
         removeRecentFile(f.file);
       })
-      .catch(console.error);
+      .catch((e) => {
+        console.error(e);
+        notify("Failed to open the file!", "error");
+      });
   }
 };
 
 export const closeActiveFile = () => {
-  // There is no file to close.
-  if (openFiles.size === 0) return;
-
+  if (openFiles.length === 0) return;
   const file = activeFile$.value.file;
+
   emit("remove-file", file);
-
   addRecentFile(file);
-  openFiles.delete(file);
 
-  activeFile$.value = openFiles.values().next()?.value || DEFAULT_CURRENT_FILE;
-  if (openFiles.size === 0) show();
+  const index = openFiles.findIndex((f) => f.file === file);
+  const length = openFiles.length;
+  openFiles.splice(index, 1);
+  if (activeIndex$.value === length - 1) {
+    activeIndex$.value -= 1;
+  } else {
+    activeIndex$.rerender();
+  }
+
+  if (activeIndex$.value < 0) show();
 };
 
 export const initialize = (files: BackendFile[]) => {
   if (files.length === 0) {
     show();
   } else {
-    activeFile$.value = files[0];
-    for (const file of files) {
-      openFiles.set(file.file, file);
-    }
+    for (const file of files) openFiles.push(file);
     activeIndex$.value = 0;
   }
 };
@@ -188,7 +180,14 @@ export namespace handleClick {
   };
 
   export const edit = () => {
-    invoke("edit_file", { file: activeFile$.value.file }).catch(console.error);
+    invoke("edit_file", { file: activeFile$.value.file })
+      .catch((e) => {
+        console.error(e);
+        notify("Failed to open file for editing!", "error");
+      })
+      .then(() => {
+        notify("Opened file with system default application.", "success");
+      });
   };
 
   export const recentFile = (e: MouseEvent) => {
@@ -226,7 +225,7 @@ export namespace on {
       amount = -1;
     }
     if (amount === null) return;
-    if (e.code) e.preventDefault();
+    if (e.code === "Tab") e.preventDefault();
     selected$.value = wrap(selected$.value + amount, 0, searchResults$.value.length - 1);
   };
 
@@ -239,8 +238,9 @@ export namespace on {
   };
 
   export const fileChanged = (e: Event<BackendFile>) => {
-    openFiles.set(e.payload.file, e.payload);
-    if (e.payload.file === activeFile$.value.file) activeFile$.value = e.payload;
+    const index = openFiles.findIndex((f) => f.file === e.payload.file);
+    index >= 0 ? (openFiles[index] = e.payload) : openFiles.push(e.payload);
+    if (index === activeIndex$.value) activeIndex$.rerender();
     if (locked_at_bottom) $bottom.scrollIntoView({ behavior: "smooth" });
   };
 }

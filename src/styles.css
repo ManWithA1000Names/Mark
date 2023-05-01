@@ -12,6 +12,12 @@ body {
   --github-gray-light: #161b22;
   --github-green: #238636;
   --github-blue: #111d2f;
+  --notif-red: rgba(248, 81, 73, 0.05);
+  --notif-blue: rgba(56, 139, 253, 0.05);
+  --notif-green: rgba(35, 134, 54, 0.05);
+  --notif-red-text: rgb(248, 81, 73);
+  --notif-blue-text: rgb(56, 139, 253);
+  --notif-green-text: rgb(35, 134, 54);
 }
 
 .markdown-body-container {
@@ -24,18 +30,19 @@ body {
   border-radius: 6px;
   overflow: auto;
 }
+
 .markdown-body-container article {
   padding: 45px;
 }
 
-.markdown-body-container header {
+header {
   border-bottom: 1px solid var(--github-gray);
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   padding: 8px;
 }
 
-.markdown-body-container h3 {
+header h3 {
   color: white;
   font-weight: bold;
   font-size: 14px;
@@ -44,7 +51,7 @@ body {
   overflow: auto;
 }
 
-.markdown-body-container header button {
+header button {
   fill: #7d8590;
   border-radius: 6px;
   background: var(--background);
@@ -57,28 +64,12 @@ body {
   align-self: center;
 }
 
-.markdown-body-container header button:hover {
+header button:hover {
   background: var(--github-gray);
 }
 
-.markdown-body-container header button:nth-of-type(1) {
+header button:nth-of-type(1) {
   margin-right: 8px;
-}
-
-.markdown-body a {
-  position: relative;
-}
-
-.markdown-body a kbd {
-  position: absolute;
-  top: -10px;
-  color: var(--link-blue);
-}
-
-@media (max-width: 767px) {
-  .markdown-body {
-    padding: 15px;
-  }
 }
 
 span.active-letter {
@@ -214,4 +205,38 @@ span.active-letter {
 
 #bottom button.locked svg {
   rotate: 45deg;
+}
+
+/* --------------- */
+
+#notifications-root {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  transition: all 0.25s ease-in-out;
+}
+
+/* --- */
+ul:has(input[type="checkbox"]) {
+  list-style: none;
+  padding-left: 16px;
+}
+
+/* --- */
+
+.markdown-body a {
+  position: relative;
+}
+
+.markdown-body a kbd {
+  position: absolute;
+  top: -15px;
+  color: var(--link-blue);
+}
+
+@media (max-width: 767px) {
+  .markdown-body {
+    padding: 15px;
+  }
 }

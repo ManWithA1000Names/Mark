@@ -1,67 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="stylesheet" href="/src/styles.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mark</title>
-  <script type="module" src="/src/main.ts" defer></script>
-</head>
-
-<body>
-  <div id="shortcut-quide"></div>
-  <div id="notifications-root"></div>
-
-  <div id="file-picker-root" hidden>
-    <h1>File Picker</h1>
-
-    <div id="recent-files-root"></div>
-
-    <div id="file-picker-files">
-      <form>
-        <input type="text" placeholder="Search markdown files..." />
-      </form>
+  <body>
+    <div id="shortcut-guide" hidden>
+      <h2>Shortcut guide</h2>
       <div>
-        <h4>Files:</h4>
-        <div id="search-results-root"></div>
+        <div>
+          <footer><kbd>H</kbd> <span>or</span> <kbd>SHIFT + ←</kbd></footer>
+          <span>Switch to the <b>previous</b> file</span>
+        </div>
+        <div>
+          <footer><kbd>L</kbd> <span>or</span> <kbd>SHIFT + →</kbd></footer>
+          <span>Switch to the <b>next</b> file</span>
+        </div>
+        <div>
+          <footer><kbd>h</kbd> <span>or</span> <kbd>←</kbd></footer>
+          <span>Scroll the page to the <b>left</b></span>
+        </div>
+        <div>
+          <footer><kbd>l</kbd> <span>or</span> <kbd>→</kbd></footer>
+          <span>Scoll the page to the <b>right</b></span>
+        </div>
+        <div>
+          <footer><kbd>k</kbd> <span>or</span> <kbd>↑</kbd></footer>
+          <span>Scroll the page <b>up</b></span>
+        </div>
+        <div>
+          <footer><kbd>j</kbd> <span>or</span> <kbd>↓</kbd></footer>
+          <span>Scroll the page <b>down</b></span>
+        </div>
+        <div>
+          <footer><kbd>u</kbd> <span>or</span> <kbd>PgUp</kbd></footer>
+          <span>Scroll <b>up</b> by one page</span>
+        </div>
+        <div>
+          <footer><kbd>d</kbd> <span>or</span> <kbd>PgDn</kbd></footer>
+          <span>Scroll <b>down</b> by one page</span>
+        </div>
+        <div>
+          <footer><kbd>g</kbd></footer>
+          <span>Scroll to the <b>top</b> of the page</span>
+        </div>
+        <div>
+          <footer><kbd>G</kbd></footer>
+          <span>Scroll to the <b>bottom</b> of the page</span>
+        </div>
+        <div>
+          <footer><kbd>b</kbd></footer>
+          <span>Toggle <b>snap to bottom</b> on file change</span>
+        </div>
+        <div>
+          <footer><kbd>f</kbd></footer>
+          <span>Open the <b>filepicker</b></span>
+        </div>
+        <div>
+          <footer><kbd>c</kbd></footer>
+          <span><b>Close</b> the active file</span>
+        </div>
+        <div>
+          <footer><kbd>o</kbd> + Link ID</footer>
+          <span>Open/Click a <b>link</b></span>
+        </div>
+        <div>
+          <footer><kbd>q</kbd></footer>
+          <span><b>Exit</b> the application</span>
+        </div>
+        <div>
+          <footer><kbd>e</kbd></footer>
+          <span><b>Edit</b> the active file</span>
+        </div>
+        <div>
+          <footer><kbd>?</kbd></footer>
+          <span>Open/Close (this) <b>shortcut guide</b></span>
+        </div>
       </div>
     </div>
-  </div>
+    <div id="notifications-root"></div>
 
-  <main class="markdown-body-container">
-    <header>
-      <button id="file-picker-button">
-        <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
-          <path
-            d="M5.75 2.5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM2 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z">
-          </path>
-        </svg>
-      </button>
-      <h3 id="file-name">filename</h3>
-      <button id="edit-file-button">
-        <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
-          <path
-            d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z">
-          </path>
-        </svg>
-      </button>
-    </header>
-    <article class="markdown-body min-h-screen">No file selected</article>
-  </main>
-  <div id="bottom">
-    <div>
-      <button>
-        <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
-          <path
-            d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z">
-          </path>
-        </svg>
-        <span>Lock at bottom (b)</span>
-      </button>
+    <div id="file-picker-root" hidden>
+      <h1>File Picker</h1>
+
+      <div id="recent-files-root"></div>
+
+      <div id="file-picker-files">
+        <form>
+          <input type="text" placeholder="Search markdown files..." />
+        </form>
+        <div>
+          <h4>Files:</h4>
+          <div id="search-results-root"></div>
+        </div>
+      </div>
     </div>
-    <div id="file-pager">0/0</div>
-  </div>
-</body>
 
+    <main class="markdown-body-container">
+      <header>
+        <button id="file-picker-button">
+          <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
+            <path
+              d="M5.75 2.5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM2 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
+            ></path>
+          </svg>
+        </button>
+        <h3 id="file-name">filename</h3>
+        <button id="edit-file-button">
+          <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
+            <path
+              d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"
+            ></path>
+          </svg>
+        </button>
+      </header>
+      <article class="markdown-body min-h-screen">No file selected</article>
+    </main>
+    <div id="bottom">
+      <div>
+        <button>
+          <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
+            <path
+              d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"
+            ></path>
+          </svg>
+          <span>Lock at bottom (b)</span>
+        </button>
+      </div>
+      <div id="file-pager">0/0</div>
+    </div>
+  </body>
 </html>

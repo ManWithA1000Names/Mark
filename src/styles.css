@@ -240,3 +240,63 @@ ul:has(input[type="checkbox"]) {
     padding: 15px;
   }
 }
+
+/* --- */
+
+#shortcut-guide {
+  background-color: #0d1117;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  box-sizing: border-box;
+  width: clamp(200px, 90vw, 980px);
+  margin: 0 auto;
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--github-gray);
+  border-radius: 6px;
+  z-index: 10;
+  color: white;
+  max-height: 100vh;
+  overflow: auto;
+  padding: 8px;
+}
+
+#shortcut-guide > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+#shortcut-guide h2 {
+  text-align: center;
+}
+
+#shortcut-guide kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110, 118, 129, 0.4);
+  border-bottom-color: rgba(110, 118, 129, 0.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110, 118, 129, 0.4);
+  color: var(--link-blue);
+}
+
+#shortcut-guide > div div {
+  border: 1px solid var(--github-gray);
+  padding: 4px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+}
+
+#shortcut-guide span {
+  margin: 0 4px;
+}

@@ -4,6 +4,8 @@ import { checkKey } from "./utils";
 import { invoke } from "@tauri-apps/api";
 import * as locked from "./lock-at-bottom";
 
+const $shortcut_guide = document.getElementById("shortcut-guide")!;
+
 const hasMods = (e: KeyboardEvent) => e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
 
 const handle_scroll_left = (e: KeyboardEvent) => {
@@ -63,7 +65,7 @@ const handle_scroll_page_up = (e: KeyboardEvent) => {
   if (e.key !== "u") return false;
 
   document.documentElement.scrollBy({
-    top: window.innerHeight / -2,
+    top: -window.innerHeight,
     behavior: "smooth",
   });
 
@@ -73,7 +75,7 @@ const handle_scroll_page_down = (e: KeyboardEvent) => {
   if (hasMods(e)) return false;
   if (e.key !== "d") return false;
   document.documentElement.scrollBy({
-    top: window.innerHeight / 2,
+    top: window.innerHeight,
     behavior: "smooth",
   });
   return true;
@@ -91,7 +93,17 @@ const handle_scroll_to_bottom = (e: KeyboardEvent) => {
   return true;
 };
 
-let mode: "default" | "link" = "default";
+let mode: "default" | "link" | "shortcut_guide" = "default";
+
+const toggleShortcutGuide = () => {
+  if ($shortcut_guide.hidden) {
+    mode = "shortcut_guide";
+    $shortcut_guide.removeAttribute("hidden");
+  } else {
+    mode = "default";
+    $shortcut_guide.setAttribute("hidden", "true");
+  }
+};
 
 export const init = () => {
   document.addEventListener("keydown", (e) => {
@@ -100,7 +112,10 @@ export const init = () => {
         mode = "default";
         return Links.hide();
       }
-      if (Links.on_keydown(e)) return;
+      return Links.on_keydown(e);
+    } else if (mode === "shortcut_guide") {
+      if (checkKey(e, "?", "shiftKey") || checkKey(e, "Escape")) toggleShortcutGuide();
+      return;
     }
 
     if (checkKey(e, "Escape") && !fp.$filepicker.hidden) return fp.hide();
@@ -137,6 +152,8 @@ export const init = () => {
     if (checkKey(e, "b")) return locked.toggle();
 
     if (checkKey(e, "e")) return document.getElementById("edit-file-button")?.click();
+
+    if (checkKey(e, "?", "shiftKey")) return toggleShortcutGuide();
 
     // idk...
   });

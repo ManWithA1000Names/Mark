@@ -47,6 +47,7 @@ Fast, easy, simple markdown viewing.
 
 - Add light theme.
 - Add support for [[./some/path]] based routing.
+- Add option to open file in github.com if it originates from there.
 
 # TODO
 
@@ -61,6 +62,7 @@ Fast, easy, simple markdown viewing.
 - [x] Option to "stick to bottom"
 - [x] Option to switch to the file that changed.
 - [x] Remove tailwindcss but keep postcss
+- [ ] Make it obvious when there are no files to search.
 
 ### Back-end
 
@@ -69,3 +71,9 @@ Fast, easy, simple markdown viewing.
 - [x] Error Handling
 - [x] Refactor & Optimize
 - [ ] Test behavior when the watcher fails.
+
+### Both
+
+- [ ] Links seem to be broken
+- [ ] Links starting with "/..." should be prepended with github.com or something.
+- [ ] Open with default applicaiton seems to be broken.

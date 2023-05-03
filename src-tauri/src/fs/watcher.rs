@@ -86,8 +86,9 @@ impl TheAllMightyWatcher {
 
     pub fn inputs(&mut self, inputs: Vec<PathBuf>) {
         for input in inputs.into_iter() {
-            if let Err(e) = self.input(input) {
-                println!("[ERROR]: {}", e);
+            if let Err(e) = self.input(input.clone()) {
+                crate::log_error!(e);
+                emit::failed_to_watch(&self.app, input);
             };
         }
     }
@@ -115,7 +116,7 @@ impl TheAllMightyWatcher {
             }
             if let Ok(path) = self.new_inputs.try_recv() {
                 if let Err(e) = self.input(path.clone()) {
-                    eprintln!("[ERROR]: {}", e);
+                    crate::log_error!(e);
                     emit::failed_to_watch(&self.app, path);
                 };
             }
@@ -129,27 +130,26 @@ impl TheAllMightyWatcher {
         let Ok(event) = event else {
             return;
         };
+
         let notify::EventKind::Modify(notify::event::ModifyKind::Data(_)) = event.kind else {
             return;
         };
-        for path in event.paths.into_iter().filter(|path| {
+
+        'outer: for path in &event.paths {
             for (key, value) in &self.watching {
                 if !path.starts_with(key) {
                     continue;
                 }
                 if let Some(set) = value {
                     if set.contains(path) {
-                        return true;
-                    };
-                } else if let Some(ext) = path.extension() {
-                    if ext == "md" {
-                        return true;
+                        emit::file_changed(&self.app, path);
+                        continue 'outer;
                     }
+                } else if path.extension().map(|ext| ext == "md").unwrap_or_default() {
+                    emit::file_changed(&self.app, path);
+                    continue 'outer;
                 }
             }
-            false
-        }) {
-            emit::file_changed(&self.app, &path);
         }
     }
 }

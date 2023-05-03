@@ -1,6 +1,6 @@
+import * as fp from "./filepicker";
 import * as bridge from "../helpers/bridge";
 
-import * as fp from "./filepicker";
 import notify from "../components/notifications";
 
 export const init = () => {
@@ -25,6 +25,7 @@ export const init = () => {
   document.getElementById("edit-file-button")!.addEventListener("click", fp.handleClick.edit);
 
   bridge.on.fileChanged(fp.on.fileChanged);
+
 
   bridge.fn
     .initialInputs()

@@ -43,4 +43,12 @@ export namespace on {
   export const fileChanged = (cb: (event: Event<BackendFile>) => void) => {
     return listen<BackendFile>("file-changed", cb);
   };
+
+  export const failedToRead = (cb: (event: Event<string>) => void) => {
+    return listen<string>("failed-to-read", cb);
+  };
+
+  export const watcherFailed = (cb: (event: Event<string>) => void) => {
+    return listen<string>("watcher-failed", cb);
+  };
 }

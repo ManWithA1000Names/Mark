@@ -1,59 +1,30 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use crossbeam_channel::Sender;
-use std::{
-    path::PathBuf,
-    sync::{Arc, Mutex},
-};
+use std::path::PathBuf;
 use tauri::Manager;
 
+mod cmds;
 mod emit;
-mod fs_search;
-mod watcher;
+mod fs;
+mod payloads;
 
-use fs_search::{FsFuzzySearcher, SearchResults};
+use fs::search::FsFuzzySearcher;
+use fs::watcher::TheAllMightyWatcher;
 
-struct SearcherState(Arc<Mutex<Option<FsFuzzySearcher>>>);
-
-#[tauri::command]
-fn exit() {
-    std::process::exit(0);
+macro_rules! log_error {
+    ($error: expr) => {{
+        if (atty::is(atty::Stream::Stdout)) {
+            eprintln!("\u{001b}[31m[ERROR]\u{001b}[0m: {:?}", $error);
+        } else {
+            eprintln!("[ERROR]: {:?}", $error);
+        }
+    }};
 }
 
-#[tauri::command]
-fn search_files(
-    state: tauri::State<SearcherState>,
-    input: &str,
-) -> Result<SearchResults, &'static str> {
-    if let Some(ref searcher) = *state.0.lock().unwrap() {
-        Ok(searcher.search(input))
-    } else {
-        Err("Loading...")
-    }
-}
+pub(crate) use log_error;
 
-#[tauri::command]
-fn new_file<'a>(
-    file: &'a str,
-    tx: tauri::State<Sender<PathBuf>>,
-) -> Result<emit::payload::FileChanged<&'a str>, &'static str> {
-    let buf = PathBuf::from(file);
-    if let Err(e) = tx.try_send(buf) {
-        println!("[ERROR]: {:?}", e);
-    }
-    emit::payload::FileChanged::new(file).map_err(|_| "Failed to open file")
-}
-
-#[tauri::command]
-fn open(file: &str) -> Result<(), &'static str> {
-    opener::open(file).map_err(|_| "Failed to topen file in the system default program")
-}
-
-#[tauri::command]
-fn open_browser(url: &str) -> Result<(), &'static str> {
-    opener::open_browser(url).map_err(|_| "Failed to to pen url in your default browser")
-}
+pub static mut SEARCHER: Option<FsFuzzySearcher> = None;
 
 fn validate_arg(arg: String) -> PathBuf {
     if arg == "--help" || arg == "-h" {
@@ -67,80 +38,15 @@ fn validate_arg(arg: String) -> PathBuf {
 
     let buf = PathBuf::from(&arg);
 
-    if buf.is_dir() {
+    if buf.is_dir() || buf.extension().map(|ext| ext == "md").unwrap_or_default() {
         return buf;
-    } else if let Some(ext) = buf.extension() {
-        if ext == "md" {
-            return buf;
-        }
     }
 
-    eprintln!(
-        "[ERROR]: Argument: '{}' does not seem to be a file or directory.",
+    log_error!(format!(
+        "Argument: '{}' does not seem to be a markdown file or a directory.",
         arg
-    );
+    ));
     std::process::exit(1);
-}
-
-// fn handle_new_file_dir_with_wacther(
-//     event: tauri::Event,
-//     app: &tauri::AppHandle,
-//     tx: &Sender<PathBuf>,
-// ) {
-//     let Some(payload) = event.payload() else {
-//         return;
-//     };
-//     if let Err(e) = tx.try_send(PathBuf::from(payload)) {
-//         eprintln!("[ERROR]: {:?}", e);
-//     } else {
-//         emit::file_changed(app, payload);
-//     }
-// }
-
-// fn handle_new_file_dir_no_watcher(event: tauri::Event, app: &tauri::AppHandle) {
-//     let Some(payload) = event.payload() else {
-//         return;
-//     };
-//     emit::file_changed(app, payload);
-// }
-
-#[derive(Clone, Debug, serde::Serialize)]
-struct InitialFile {
-    file: PathBuf,
-    content: String,
-}
-
-#[tauri::command]
-fn init_inputs(state: tauri::State<Vec<PathBuf>>) -> Vec<InitialFile> {
-    let mut v = Vec::new();
-    for input in state.iter() {
-        match std::fs::read_to_string(input) {
-            Err(e) => eprintln!("[ERROR]: {:?}", e),
-            Ok(ref payload) => v.push(InitialFile {
-                content: markdown::to_html_with_options(
-                    payload,
-                    &markdown::Options {
-                        compile: markdown::CompileOptions {
-                            allow_dangerous_html: true,
-                            ..markdown::CompileOptions::default()
-                        },
-                        ..markdown::Options::gfm()
-                    },
-                )
-                .unwrap(),
-                file: input.to_owned(),
-            }),
-        };
-    }
-    v
-}
-
-#[tauri::command]
-fn open_link(app: tauri::AppHandle, link: String) {
-    if let Err(e) = opener::open_browser(link) {
-        eprintln!("[ERROR]: {:?}", e);
-        emit::failed_to_open_link(&app);
-    }
 }
 
 fn main() {
@@ -149,51 +55,50 @@ fn main() {
         .map(validate_arg)
         .collect::<Vec<PathBuf>>();
 
-    inputs.push(PathBuf::from("/home/quri/dev/external/Mark/README.md"));
+    inputs.push("/home/quri/dev/external/Mark/README.md".into());
 
-    let search_state = SearcherState(Arc::new(Mutex::new(None)));
-    let mutex2 = search_state.0.clone();
     std::thread::spawn(move || {
-        // If someone panicked holding the lock we are fucked.
-        let mut lock = mutex2.lock().unwrap();
-        *lock = Some(FsFuzzySearcher::new().unwrap());
+        // We are only once (here \/) writing to searcher, so it is safe to be mutated.
+        // So no race confitions.
+        unsafe { SEARCHER = FsFuzzySearcher::new().ok() };
     });
 
     let (tx_inputs, rx_inputs) = crossbeam_channel::unbounded();
-    let (tx_remove, rx_remove) = crossbeam_channel::unbounded();
 
     tauri::Builder::default()
         .manage(inputs.clone())
-        .manage(search_state)
         .manage(tx_inputs)
         .setup(move |app| {
+            let handle = app.handle();
+            let (tx_remove, rx_remove) = crossbeam_channel::unbounded();
             app.listen_global("remove-file", move |e| {
                 if let Some(Ok(string)) = e.payload().map(serde_json::from_str::<String>) {
-                    if let Err(e) = tx_remove.try_send(PathBuf::from(string)) {
-                        eprintln!("[ERROR]: {:?}", e);
+                    if let Err(e) = tx_remove.try_send(PathBuf::from(&string)) {
+                        log_error!(e);
+                        emit::failed_to_unwatch(&handle, string);
                     }
                 }
             });
-            match watcher::TheAllMightyWatcher::new(rx_inputs, rx_remove, app.handle()) {
+            match TheAllMightyWatcher::new(rx_inputs, rx_remove, app.handle()) {
                 Ok(mut watcher) => {
                     watcher.inputs(inputs);
                     watcher.spawn();
                 }
                 Err(e) => {
-                    eprintln!("[ERROR]: {:?}", e);
+                    log_error!(e);
+                    emit::watcher_failed(&app.handle());
                 }
             };
 
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            exit,
-            init_inputs,
-            open_link,
-            search_files,
-            new_file,
-            open,
-            open_browser,
+            cmds::exit,
+            cmds::init_inputs,
+            cmds::search_files,
+            cmds::new_file,
+            cmds::open,
+            cmds::open_browser,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -43,6 +43,11 @@ Fast, easy, simple markdown viewing.
 
 [My Repositories](https://github.com/manwitha1000names?tab=repositories)
 
+# Maybe Additional Features
+
+- Add light theme.
+- Add support for [[./some/path]] based routing.
+
 # TODO
 
 ### Front-end
@@ -56,14 +61,11 @@ Fast, easy, simple markdown viewing.
 - [x] Option to "stick to bottom"
 - [x] Option to switch to the file that changed.
 - [x] Remove tailwindcss but keep postcss
-- [ ] Add light theme.
-- [ ] Animate notifications?
 
 ### Back-end
 
 - [x] Implement `remove-file`
-- [ ] Flush out client-backend interface // invokes & listeners
-- [ ] Error Handling
-- [ ] Refactor & Optimize
-
-This is trash what is this? NO WAY no fuck you FUUUCK no way this is crazy!
+- [x] Flush out client-backend interface // invokes & listeners
+- [x] Error Handling
+- [x] Refactor & Optimize
+- [ ] Test behavior when the watcher fails.

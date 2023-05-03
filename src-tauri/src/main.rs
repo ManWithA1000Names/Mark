@@ -7,7 +7,6 @@ use std::{
     sync::{Arc, Mutex},
 };
 use tauri::Manager;
-// use tauri::Manager;
 
 mod emit;
 mod fs_search;
@@ -17,7 +16,6 @@ use fs_search::{FsFuzzySearcher, SearchResults};
 
 struct SearcherState(Arc<Mutex<Option<FsFuzzySearcher>>>);
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn exit() {
     std::process::exit(0);
@@ -36,7 +34,7 @@ fn search_files(
 }
 
 #[tauri::command]
-fn open_file<'a>(
+fn new_file<'a>(
     file: &'a str,
     tx: tauri::State<Sender<PathBuf>>,
 ) -> Result<emit::payload::FileChanged<&'a str>, &'static str> {
@@ -48,8 +46,13 @@ fn open_file<'a>(
 }
 
 #[tauri::command]
-fn edit_file(file: &str) -> Result<(), &'static str> {
+fn open(file: &str) -> Result<(), &'static str> {
     opener::open(file).map_err(|_| "Failed to topen file in the system default program")
+}
+
+#[tauri::command]
+fn open_browser(url: &str) -> Result<(), &'static str> {
+    opener::open_browser(url).map_err(|_| "Failed to to pen url in your default browser")
 }
 
 fn validate_arg(arg: String) -> PathBuf {
@@ -188,8 +191,9 @@ fn main() {
             init_inputs,
             open_link,
             search_files,
-            open_file,
-            edit_file,
+            new_file,
+            open,
+            open_browser,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

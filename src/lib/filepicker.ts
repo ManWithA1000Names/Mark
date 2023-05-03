@@ -1,14 +1,15 @@
-import type { BackendFile, SearchResults } from "./types";
-import { emit, Event } from "@tauri-apps/api/event";
+import type { Event } from "@tauri-apps/api/event";
+import type { BackendFile, SearchResults } from "../helpers/bridge";
 
-import { checkKey, wrap } from "./utils";
-import { search } from "./search";
-import { RenderedObservable } from "./observable";
 import * as render from "../components";
-import { invoke } from "@tauri-apps/api";
-import { locked_at_bottom } from "./lock-at-bottom";
+import * as bridge from "../helpers/bridge";
+
 import notify from "../components/notifications";
+
+import { checkKey, wrap } from "../helpers/utils";
+import { locked_at_bottom } from "./lock-at-bottom";
 import { switch_to_changing } from "./switch-to-changing";
+import { RenderedObservable } from "../helpers/observable";
 
 const DEFAULT_CURRENT_FILE: BackendFile = {
   file: "no file selected",
@@ -50,7 +51,8 @@ const removeRecentFile = (file: string, index?: number) => {
 };
 
 const __search = async (input: string = "") => {
-  return search(input)
+  return bridge.fn
+    .search(input)
     .then((results) => {
       selected$.value = 0;
       searchResults$.value = results;
@@ -89,7 +91,8 @@ export const setActiveFile = (file: string) => {
   if (index >= 0) {
     activeIndex$.value = index;
   } else {
-    invoke<BackendFile>("open_file", { file })
+    bridge.fn
+      .newFile(file)
       .then((f) => {
         openFiles.push(f);
         activeIndex$.value = openFiles.length - 1;
@@ -106,7 +109,7 @@ export const closeActiveFile = () => {
   if (openFiles.length === 0) return;
   const file = activeFile$.value.file;
 
-  emit("remove-file", file);
+  bridge.emit.removeFile(file);
   addRecentFile(file);
 
   const index = openFiles.findIndex((f) => f.file === file);
@@ -180,13 +183,14 @@ export namespace handleClick {
   };
 
   export const edit = () => {
-    invoke("edit_file", { file: activeFile$.value.file })
+    bridge.fn
+      .open(activeFile$.value.file)
+      .then(() => {
+        notify("Opened file with system default application.", "success");
+      })
       .catch((e) => {
         console.error(e);
         notify("Failed to open file for editing!", "error");
-      })
-      .then(() => {
-        notify("Opened file with system default application.", "success");
       });
   };
 
@@ -238,7 +242,6 @@ export namespace on {
   };
 
   export const fileChanged = (e: Event<BackendFile>) => {
-    console.log(e);
     const index = openFiles.findIndex((f) => f.file === e.payload.file);
     index >= 0 ? (openFiles[index] = e.payload) : openFiles.push(e.payload);
     if (switch_to_changing) {

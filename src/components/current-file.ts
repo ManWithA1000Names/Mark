@@ -1,4 +1,4 @@
-import type { BackendFile } from "../lib/types";
+import type { BackendFile } from "../helpers/bridge";
 
 const $currentFileRoot = document.querySelector("article")!;
 const $fileNameRoot = document.getElementById("file-name")!;

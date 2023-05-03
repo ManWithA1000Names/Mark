@@ -1,6 +1,4 @@
-import { invoke } from "@tauri-apps/api";
-import { listen } from "@tauri-apps/api/event";
-import type { BackendFile } from "./types";
+import * as bridge from "../helpers/bridge";
 
 import * as fp from "./filepicker";
 import notify from "../components/notifications";
@@ -26,9 +24,10 @@ export const init = () => {
 
   document.getElementById("edit-file-button")!.addEventListener("click", fp.handleClick.edit);
 
-  listen<BackendFile>("file-changed", fp.on.fileChanged);
+  bridge.on.fileChanged(fp.on.fileChanged);
 
-  invoke<BackendFile[]>("init_inputs")
+  bridge.fn
+    .initialInputs()
     .then(fp.initialize)
     .catch(() => notify("Failed to retrieve initial inputs!", "error"));
 };

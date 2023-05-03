@@ -57,6 +57,7 @@ Fast, easy, simple markdown viewing.
 - [x] Option to switch to the file that changed.
 - [x] Remove tailwindcss but keep postcss
 - [ ] Add light theme.
+- [ ] Animate notifications?
 
 ### Back-end
 

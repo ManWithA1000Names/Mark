@@ -10,7 +10,7 @@ export const toggle = () => {
   if (switch_to_changing) {
     $button.classList.add("locked");
     $text.innerText = "Dont switch to changing file";
-    notify("Switching to the changing files", "info");
+    notify("Switching to changing files", "info");
   } else {
     $button.classList.remove("locked");
     $text.innerText = "Switch to changing file";

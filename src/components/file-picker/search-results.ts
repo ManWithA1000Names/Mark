@@ -1,4 +1,4 @@
-import type { BackendFile, SearchResults } from "../../lib/types";
+import type { BackendFile, SearchResults } from "../../helpers/bridge";
 import styles from "./styles.module.css";
 
 let previous_selection = 0;
@@ -39,7 +39,7 @@ export function render(
       $button.style.cursor = "not-allowed";
     }
 
-    if (!!openFiles.find(f => f.file === result.file)) {
+    if (!!openFiles.find((f) => f.file === result.file)) {
       const $span = document.createElement("span");
       $span.append(...spans);
       const $div = document.createElement("div");

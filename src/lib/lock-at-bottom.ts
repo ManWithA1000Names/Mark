@@ -12,11 +12,11 @@ export const toggle = () => {
     $text.innerText = "Unsnap";
     $button.classList.add("locked");
     $bottom.scrollIntoView({ behavior: "smooth" });
-    notify("Scrolling to the end on file change.", "info");
+    notify("Snapping to bottom.", "info");
   } else {
     $text.innerText = "Snap to bottom";
     $button.classList.remove("locked");
-    notify("Not scrolling to the end on file change.", "info");
+    notify("Not snapping to bottom", "info");
   }
 };
 

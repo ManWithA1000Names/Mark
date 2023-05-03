@@ -3,8 +3,10 @@ import * as fp from "./filepicker";
 import { checkKey } from "./utils";
 import { invoke } from "@tauri-apps/api";
 import * as locked from "./lock-at-bottom";
+import * as switching from "./switch-to-changing";
 
 const $shortcut_guide = document.getElementById("shortcut-guide")!;
+const $edit_button = document.getElementById("edit-file-button")!;
 
 const hasMods = (e: KeyboardEvent) => e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
 
@@ -87,9 +89,11 @@ const handle_scroll_to_top = (e: KeyboardEvent) => {
   return true;
 };
 
+const $bottom = document.querySelector("footer")!;
 const handle_scroll_to_bottom = (e: KeyboardEvent) => {
   if (!checkKey(e, "G", "shiftKey")) return false;
-  document.getElementById("bottom")?.scrollIntoView({ behavior: "smooth" });
+  console.log($bottom);
+  $bottom.scrollIntoView({ behavior: "smooth" });
   return true;
 };
 
@@ -151,9 +155,11 @@ export const init = () => {
 
     if (checkKey(e, "b")) return locked.toggle();
 
-    if (checkKey(e, "e")) return document.getElementById("edit-file-button")?.click();
+    if (checkKey(e, "e")) return $edit_button?.click();
 
     if (checkKey(e, "?", "shiftKey")) return toggleShortcutGuide();
+
+    if (checkKey(e, "s")) return switching.toggle();
 
     // idk...
   });

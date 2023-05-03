@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
-import { BackendFile } from "../types";
+import type { BackendFile } from "./types";
 
 import * as fp from "./filepicker";
 import notify from "../components/notifications";
@@ -11,16 +11,18 @@ export const init = () => {
   fp.$input.addEventListener("keydown", fp.on.inputKeydown);
 
   document
-    .getElementById("search-results-root")!
-    .addEventListener("click", fp.handleClick.searchResult);
-
-  document
     .getElementById("recent-files-root")!
     .addEventListener("click", fp.handleClick.recentFile);
 
   document
+    .getElementById("search-results-root")!
+    .addEventListener("click", fp.handleClick.searchResult);
+
+  document
     .getElementById("file-picker-button")!
     .addEventListener("click", fp.handleClick.openClose);
+
+  document.getElementById("close-active-file")!.addEventListener("click", fp.closeActiveFile);
 
   document.getElementById("edit-file-button")!.addEventListener("click", fp.handleClick.edit);
 

@@ -1,0 +1,38 @@
+header {
+  border-bottom: 1px solid var(--github-gray);
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  padding: 8px;
+  position: sticky;
+  top: 0px;
+  background-color: var(--background);
+  border-top-left-radius: var(--github-radius);
+  border-top-right-radius: var(--github-radius);
+  z-index: 3;
+}
+
+header h3 {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+  align-self: center;
+  overflow: auto;
+}
+
+header button {
+  fill: #7d8590;
+  border-radius: var(--github-radius);
+  background: var(--background);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: background-color 0.1s ease-in-out;
+  justify-self: center;
+  align-self: center;
+}
+
+header button:hover {
+  background: var(--github-gray);
+}

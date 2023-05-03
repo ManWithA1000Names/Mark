@@ -1,0 +1,54 @@
+footer {
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  margin-top: 8px;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+
+footer button {
+  padding: 5px 16px;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+  border-radius: var(--github-radius);
+  margin: 0;
+  background: none;
+  outline: none;
+  border: none;
+  fill: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  color: var(--link-blue);
+  cursor: pointer;
+  transition: background-color 80ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+#bottom-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+footer button:hover {
+  background-color: var(--github-gray);
+  transition: rotate 0.25s ease;
+}
+
+footer button:hover span {
+  text-decoration: underline;
+  text-decoration-color: var(--link-blue);
+}
+
+footer button svg {
+  transition: rotate 0.25s ease;
+}
+
+footer button.locked svg {
+  rotate: 45deg;
+}

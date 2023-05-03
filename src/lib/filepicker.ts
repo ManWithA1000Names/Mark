@@ -1,4 +1,4 @@
-import type { BackendFile, SearchResults } from "../types";
+import type { BackendFile, SearchResults } from "./types";
 import { emit, Event } from "@tauri-apps/api/event";
 
 import { checkKey, wrap } from "./utils";
@@ -8,6 +8,7 @@ import * as render from "../components";
 import { invoke } from "@tauri-apps/api";
 import { locked_at_bottom } from "./lock-at-bottom";
 import notify from "../components/notifications";
+import { switch_to_changing } from "./switch-to-changing";
 
 const DEFAULT_CURRENT_FILE: BackendFile = {
   file: "no file selected",
@@ -17,15 +18,14 @@ const DEFAULT_CURRENT_FILE: BackendFile = {
 const recentFiles: string[] = [];
 const openFiles: BackendFile[] = [];
 
-const $bottom = document.getElementById("bottom") as HTMLDivElement;
-const $pager = document.getElementById("file-pager") as HTMLDivElement;
+const $bottom = document.querySelector("footer") as HTMLDivElement;
 export const $form = document.querySelector("form") as HTMLFormElement;
 export const $input = document.querySelector("input") as HTMLInputElement;
 export const $filepicker = document.getElementById("file-picker-root") as HTMLDivElement;
 
 export const activeFile$ = new RenderedObservable(DEFAULT_CURRENT_FILE, render.activeFile);
 export const activeIndex$ = new RenderedObservable(-1, (index) => {
-  $pager.innerText = `${index + 1}/${openFiles.length}`;
+  render.filePager(index, openFiles.length, nextFile, prevFile);
   activeFile$.value = index < 0 ? DEFAULT_CURRENT_FILE : openFiles[index];
 });
 export const selected$ = new RenderedObservable(0, render.selectionChange);
@@ -238,9 +238,14 @@ export namespace on {
   };
 
   export const fileChanged = (e: Event<BackendFile>) => {
+    console.log(e);
     const index = openFiles.findIndex((f) => f.file === e.payload.file);
     index >= 0 ? (openFiles[index] = e.payload) : openFiles.push(e.payload);
-    if (index === activeIndex$.value) activeIndex$.rerender();
+    if (switch_to_changing) {
+      activeIndex$.value = index >= 0 ? index : openFiles.length - 1;
+    } else if (index === activeIndex$.value) {
+      activeIndex$.rerender();
+    }
     if (locked_at_bottom) $bottom.scrollIntoView({ behavior: "smooth" });
   };
 }

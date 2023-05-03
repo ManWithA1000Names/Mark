@@ -1,0 +1,9 @@
+/* more CSS is located in: $ROOT/src/components/notifications/styles.module.css */
+
+#notifications-root {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  transition: all 0.25s ease-in-out;
+}

@@ -51,14 +51,15 @@ class Links {
     }
   }
 
-  private hideLinkHints() {
+  private highlightLinkIDs() {
     if (this.currentLinkID.length === 0) return;
     const anchors = this.getAnchors();
     for (let i = 0; i < anchors.length; i++) {
       const spans = anchors[i].getElementsByTagName("span");
       for (let j = 0; j < this.currentLinkID.length; j++) {
         if (spans[j].innerText === this.currentLinkID[j]) {
-          spans[j].classList.add("active-letter");
+          spans[j].style.color = "white";
+          spans[j].style.fontWeight = "bold";
         }
       }
     }
@@ -77,14 +78,14 @@ class Links {
     this.IDlength();
     for (let i = 0; i < anchors.length; i++) {
       const id = this.generateID(i, this.id_length);
-      const kbd = document.createElement("kbd");
-      kbd.style.right = this.id_length * -10 + "px";
+      const $kbd = document.createElement("kbd");
+      $kbd.style.right = this.id_length * -10 + "px";
       for (const letter of id.split("")) {
-        const span = document.createElement("span");
-        span.innerText = letter;
-        kbd.appendChild(span);
+        const $span = document.createElement("span");
+        $span.innerText = letter;
+        $kbd.appendChild($span);
       }
-      anchors[i].appendChild(kbd);
+      anchors[i].appendChild($kbd);
     }
   }
 
@@ -117,7 +118,7 @@ class Links {
       anchors[this.reverseID(this.currentLinkID, this.id_length)]?.click();
       document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     } else {
-      this.hideLinkHints();
+      this.highlightLinkIDs();
     }
 
     return true;

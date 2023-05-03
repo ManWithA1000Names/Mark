@@ -1,0 +1,39 @@
+.markdown-body-container {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.1);
+  border: var(--github-border);
+  border-radius: var(--github-radius);
+}
+
+.markdown-body-container article {
+  padding: 45px;
+}
+
+ul:has(input[type="checkbox"]) {
+  list-style: none;
+  padding-left: 16px;
+}
+
+.markdown-body {
+  border-bottom-right-radius: var(--github-radius);
+  border-bottom-left-radius: var(--github-radius);
+}
+
+.markdown-body a {
+  position: relative;
+}
+
+.markdown-body a kbd {
+  position: absolute;
+  top: -15px;
+  color: var(--link-blue);
+}
+
+@media (max-width: 767px) {
+  .markdown-body {
+    padding: 15px;
+  }
+}

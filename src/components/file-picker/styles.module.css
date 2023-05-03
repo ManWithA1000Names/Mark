@@ -1,3 +1,5 @@
+/* more CSS is located in: $ROOT/src/styles/filepicker.css */
+
 .active_letter {
   font-weight: bold;
   color: var(--github-green);
@@ -12,8 +14,8 @@
 }
 
 .search_result_list li {
-  border-radius: 6px;
-  border: 1px solid var(--github-gray);
+  border-radius: var(--github-radius);
+  border: var(--github-border);
   margin: 4px 0;
   transition: all 0.1s ease-in-out;
   overflow: hidden;
@@ -22,6 +24,10 @@
 .search_result_list li.active_selection {
   background-color: var(--github-gray);
   border: 1px solid var(--github-green);
+}
+
+.search_result_list li:not(.active_selection):hover {
+  background-color: var(--github-gray);
 }
 
 .search_result_list li button {
@@ -37,25 +43,9 @@
   overflow: auto;
 }
 
-.search_result_list li:not(.active_selection):hover {
-  background-color: var(--github-gray);
-}
-
 .search_result_list li button.recent_files_button {
   display: grid;
   grid-template-columns: 1fr max-content;
-}
-
-.search_result_list li button.recent_files_button span {
-  overflow: auto;
-}
-
-.recent_files_button kbd {
-  font-size: 0.75rem;
-  background-color: var(--github-green);
-  border: 1px solid var(--github-green);
-  border-radius: 6px;
-  padding: 0 2px;
 }
 
 .search_result_list li button.open {
@@ -72,19 +62,19 @@
   position: relative;
 }
 
-.search_result_list li button.active:first-child {
+.search_result_list li button span {
   overflow: auto;
 }
 
-.search_result_list li button.open:first-child {
-  overflow: auto;
+.recent_files_button kbd {
+  background-color: var(--github-green);
 }
 
 .open_badge {
   font-size: 0.75rem;
   background-color: var(--github-green) !important;
-  border: 1px solid var(--github-gray);
-  border-radius: 6px;
+  border: var(--github-border);
+  border-radius: var(--github-radius);
   padding: 2px 4px !important;
   height: calc(100% - 4px);
   align-self: center;
@@ -93,8 +83,8 @@
 .active_badge {
   font-size: 0.75rem;
   background-color: var(--github-blue) !important;
-  border: 1px solid var(--github-gray);
-  border-radius: 6px;
+  border: var(--github-border);
+  border-radius: var(--github-radius);
   padding: 2px 4px !important;
   height: calc(100% - 4px);
   align-self: center;

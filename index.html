@@ -9,82 +9,86 @@
   </head>
 
   <body>
-    <div id="shortcut-guide" hidden>
+    <section id="shortcut-guide" hidden>
       <h2>Shortcut guide</h2>
-      <div>
-        <div>
-          <footer><kbd>H</kbd> <span>or</span> <kbd>SHIFT + ←</kbd></footer>
+      <ul>
+        <li>
+          <div><kbd>H</kbd> <span>or</span> <kbd>SHIFT + ←</kbd></div>
           <span>Switch to the <b>previous</b> file</span>
-        </div>
-        <div>
-          <footer><kbd>L</kbd> <span>or</span> <kbd>SHIFT + →</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>L</kbd> <span>or</span> <kbd>SHIFT + →</kbd></div>
           <span>Switch to the <b>next</b> file</span>
-        </div>
-        <div>
-          <footer><kbd>h</kbd> <span>or</span> <kbd>←</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>h</kbd> <span>or</span> <kbd>←</kbd></div>
           <span>Scroll the page to the <b>left</b></span>
-        </div>
-        <div>
-          <footer><kbd>l</kbd> <span>or</span> <kbd>→</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>l</kbd> <span>or</span> <kbd>→</kbd></div>
           <span>Scoll the page to the <b>right</b></span>
-        </div>
-        <div>
-          <footer><kbd>k</kbd> <span>or</span> <kbd>↑</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>k</kbd> <span>or</span> <kbd>↑</kbd></div>
           <span>Scroll the page <b>up</b></span>
-        </div>
-        <div>
-          <footer><kbd>j</kbd> <span>or</span> <kbd>↓</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>j</kbd> <span>or</span> <kbd>↓</kbd></div>
           <span>Scroll the page <b>down</b></span>
-        </div>
-        <div>
-          <footer><kbd>u</kbd> <span>or</span> <kbd>PgUp</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>u</kbd> <span>or</span> <kbd>PgUp</kbd></div>
           <span>Scroll <b>up</b> by one page</span>
-        </div>
-        <div>
-          <footer><kbd>d</kbd> <span>or</span> <kbd>PgDn</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>d</kbd> <span>or</span> <kbd>PgDn</kbd></div>
           <span>Scroll <b>down</b> by one page</span>
-        </div>
-        <div>
-          <footer><kbd>g</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>g</kbd></div>
           <span>Scroll to the <b>top</b> of the page</span>
-        </div>
-        <div>
-          <footer><kbd>G</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>G</kbd></div>
           <span>Scroll to the <b>bottom</b> of the page</span>
-        </div>
-        <div>
-          <footer><kbd>b</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>b</kbd></div>
           <span>Toggle <b>snap to bottom</b> on file change</span>
-        </div>
-        <div>
-          <footer><kbd>f</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>f</kbd></div>
           <span>Open the <b>filepicker</b></span>
-        </div>
-        <div>
-          <footer><kbd>c</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>c</kbd></div>
           <span><b>Close</b> the active file</span>
-        </div>
-        <div>
-          <footer><kbd>o</kbd> + Link ID</footer>
+        </li>
+        <li>
+          <div><kbd>o</kbd> + Link ID</div>
           <span>Open/Click a <b>link</b></span>
-        </div>
-        <div>
-          <footer><kbd>q</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>q</kbd></div>
           <span><b>Exit</b> the application</span>
-        </div>
-        <div>
-          <footer><kbd>e</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>e</kbd></div>
           <span><b>Edit</b> the active file</span>
-        </div>
-        <div>
-          <footer><kbd>?</kbd></footer>
+        </li>
+        <li>
+          <div><kbd>?</kbd></div>
           <span>Open/Close (this) <b>shortcut guide</b></span>
-        </div>
-      </div>
-    </div>
-    <div id="notifications-root"></div>
+        </li>
+        <li>
+          <div><kbd>s</kbd></div>
+          <span>Toggle <b>swicth</b> to changing file</span>
+        </li>
+      </ul>
+    </section>
+    <section id="notifications-root"></section>
 
-    <div id="file-picker-root" hidden>
+    <section id="file-picker-root" hidden>
       <h1>File Picker</h1>
 
       <div id="recent-files-root"></div>
@@ -98,11 +102,11 @@
           <div id="search-results-root"></div>
         </div>
       </div>
-    </div>
+    </section>
 
     <main class="markdown-body-container">
       <header>
-        <button id="file-picker-button">
+        <button id="file-picker-button" style="margin-right: 8px" title="key: f">
           <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
             <path
               d="M5.75 2.5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM2 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
@@ -110,28 +114,46 @@
           </svg>
         </button>
         <h3 id="file-name">filename</h3>
-        <button id="edit-file-button">
-          <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
-            <path
-              d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"
-            ></path>
-          </svg>
-        </button>
+        <div>
+          <button id="edit-file-button" title="key: e">
+            <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
+              <path
+                d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"
+              ></path>
+            </svg>
+          </button>
+          <button id="close-active-file" title="key: c">
+            <svg style="rotate: 45deg" height="16" viewBox="0 0 16 16" version="1.1" width="16">
+              <path
+                d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"
+              ></path>
+            </svg>
+          </button>
+        </div>
       </header>
       <article class="markdown-body min-h-screen">No file selected</article>
     </main>
-    <div id="bottom">
-      <div>
-        <button>
+
+    <footer>
+      <div id="bottom-buttons">
+        <button title="key: b" id="snap-to-bottom-button">
           <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
             <path
               d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"
             ></path>
           </svg>
-          <span>Lock at bottom (b)</span>
+          <span>Snap to bottom</span>
+        </button>
+        <button title="key: s" id="switch-to-changed-button">
+          <svg height="16" viewBox="0 0 16 16" version="1.1" width="16">
+            <path
+              d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"
+            ></path>
+          </svg>
+          <span>Switch to changing file</span>
         </button>
       </div>
-      <div id="file-pager">0/0</div>
-    </div>
+      <div id="file-pager" title="open files">0/0</div>
+    </footer>
   </body>
 </html>

@@ -47,19 +47,22 @@ Fast, easy, simple markdown viewing.
 
 ### Front-end
 
-- [ ] Implement keyboard shortcuts.
-- [ ] Error Handling
-- [ ] Notification System
-- [ ] Shortcut Guide
-- [ ] Multi-file widget thing
-- [ ] CSS refactor
+- [x] Implement keyboard shortcuts.
+- [x] Error Handling
+- [x] Notification System
+- [x] Shortcut Guide
+- [x] Multi-file widget thing
+- [x] CSS refactor
 - [x] Option to "stick to bottom"
-- [ ] Option to switch to the file that changed.
+- [x] Option to switch to the file that changed.
+- [x] Remove tailwindcss but keep postcss
+- [ ] Add light theme.
 
 ### Back-end
 
 - [x] Implement `remove-file`
 - [ ] Flush out client-backend interface // invokes & listeners
+- [ ] Error Handling
 - [ ] Refactor & Optimize
 
-hello what no way this is crazy yes sir
+This is trash what is this? NO WAY no fuck you FUUUCK no way this is crazy!

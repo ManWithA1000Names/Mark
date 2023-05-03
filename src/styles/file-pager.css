@@ -1,0 +1,5 @@
+#file-pager {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -63,6 +63,8 @@ Fast, easy, simple markdown viewing.
 - [x] Option to switch to the file that changed.
 - [x] Remove tailwindcss but keep postcss
 - [ ] Make it obvious when there are no files to search.
+- [ ] Set default font.
+
 
 ### Back-end
 

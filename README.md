@@ -11,7 +11,7 @@ Fast, easy, simple, cross-platform markdown viewing.
 - 📡 Live updates
 - ⌨️ Keyboard Driven
 - 📑 Multiple Files
-- ⬇️ Markdown only file picker
+- ⬇️ Markdown files only file picker
 - 🐙 Full CommonMark + GitHub Flavored Markdown (GFM) support.
 
 ## Open files from the terminal
@@ -19,10 +19,6 @@ Fast, easy, simple, cross-platform markdown viewing.
 ```bash
     mark ./file1.md ./file2.md ...
 ```
-
-## File Picker
-
-![file picker img](https://github.com/manwitha1000names/Mark/raw/master/.github/filepicker.png)
 
 ## Keyboard Bindings
 
@@ -41,13 +37,8 @@ Fast, easy, simple, cross-platform markdown viewing.
 | <kbd>e</kbd>                         | Edit the file        |
 | <kbd>?</kbd>                         | View Shortcuts       |
 
-[My Github](https://github.com/manwitha1000names)
-
-[My Repositories](https://github.com/manwitha1000names?tab=repositories)
-
 # Maybe Additional Features
 
-- Add light theme.
 - Add support for [[./some/path]] based routing.
 - Add option to open file in github.com if it originates from there.
 

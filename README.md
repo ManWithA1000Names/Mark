@@ -1,4 +1,4 @@
-# ⚠️  WORK IN PROGRESS ⚠️ 
+# ⚠️ WORK IN PROGRESS ⚠️
 
 # Mark
 
@@ -62,7 +62,6 @@ Fast, easy, simple, cross-platform markdown viewing.
 - [ ] Rewrite styles in tailwindcss => yes.
 - [ ] Allow for light/dark theme switching.
 
-
 ### Back-end
 
 - [x] Implement `remove-file`
@@ -70,6 +69,7 @@ Fast, easy, simple, cross-platform markdown viewing.
 - [x] Error Handling
 - [x] Refactor & Optimize
 - [ ] Test behavior when the watcher fails.
+- [ ] fork the markdown rust crate and optimize it for this specific use case.
 
 ### Both
 

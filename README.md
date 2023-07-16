@@ -1,6 +1,8 @@
+# ⚠️  WORK IN PROGRESS ⚠️ 
+
 # Mark
 
-Fast, easy, simple markdown viewing.
+Fast, easy, simple, cross-platform markdown viewing.
 
 ### Features:
 
@@ -64,6 +66,10 @@ Fast, easy, simple markdown viewing.
 - [x] Remove tailwindcss but keep postcss
 - [ ] Make it obvious when there are no files to search.
 - [ ] Set default font.
+
+- [ ] Rewrite in elm? => yes.
+- [ ] Rewrite styles in tailwindcss => yes.
+- [ ] Allow for light/dark theme switching.
 
 
 ### Back-end

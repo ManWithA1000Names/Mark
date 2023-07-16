@@ -55,7 +55,7 @@ fn main() {
         .map(validate_arg)
         .collect::<Vec<PathBuf>>();
 
-    inputs.push("/home/quri/dev/external/Mark/README.md".into());
+    inputs.push("../README.md".into());
 
     std::thread::spawn(move || {
         // We are only once (here \/) writing to searcher, so it is safe to be mutated.
